@@ -8,9 +8,9 @@ import { useTranslation } from "react-i18next";
 import {
   BottomSheetFlatList,
   BottomSheetFlatListMethods,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { useFilters } from "@/stores/useFilterStore";
+import useAppContent from "@/hooks/useAppContent";
 
 interface Props {
   refresh?: number;
@@ -18,6 +18,7 @@ interface Props {
 
 const DoctorList = ({ refresh }: Props) => {
   const { t } = useTranslation();
+  const { specialties } = useAppContent();
   const filters = useFilters();
   const doctors = useFilteredDoctors(filters);
   const listRef = useRef<BottomSheetFlatListMethods>(null);
@@ -30,7 +31,7 @@ const DoctorList = ({ refresh }: Props) => {
 
   return (
     <BottomSheetFlatList
-      renderItem={renderDoctorRow}
+      renderItem={({ item }) => renderDoctorRow({ item, specialties })}
       data={doctors}
       ref={listRef}
       ListEmptyComponent={

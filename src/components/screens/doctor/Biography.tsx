@@ -5,7 +5,7 @@ import { TouchableOpacity, View } from "react-native";
 
 const Biography = ({ doctor }: { doctor: any }) => {
   const [isTextTruncated, setIsTextTruncated] = useState(false);
-  const [showFullBio, setShowFullBio] = useState(false);
+  const [showFullBio, setShowFullBio] = useState(true);
 
   return (
     <View

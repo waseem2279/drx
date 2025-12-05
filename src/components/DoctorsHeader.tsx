@@ -9,13 +9,14 @@ import IconButton from "./IconButton";
 import CustomIcon from "./CustomIcon";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
-import { getSpecializations } from "@/constants/options";
 import { useSetFilters } from "@/stores/useFilterStore";
+import useAppContent from "@/hooks/useAppContent";
 
 const DoctorsHeader = () => {
   const { t } = useTranslation();
   const setFilters = useSetFilters();
-  const searchFilters = useMemo(() => getSpecializations(t), [t]);
+  const { specialties } = useAppContent();
+  const searchFilters = useMemo(() => specialties, [specialties]);
   const scrollRef = useRef<typeof ScrollView | null>(null);
   const router = useRouter();
   const itemsRef = useRef<Array<typeof TouchableOpacity | null>>([]);
@@ -35,7 +36,7 @@ const DoctorsHeader = () => {
     });
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFilters({ specialty: searchFilters[index].value });
+    setFilters({ specialty: searchFilters[index] });
   };
 
   return (
@@ -92,7 +93,7 @@ const DoctorsHeader = () => {
                   : { color: Colors.lightText }
               }
             >
-              {item.label}
+              {item.replace(/\b\w/g, (char) => char.toUpperCase())}
             </TextSemiBold>
           </TouchableOpacity>
         ))}

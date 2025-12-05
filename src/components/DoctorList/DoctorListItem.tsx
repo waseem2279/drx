@@ -8,20 +8,26 @@ import {
 } from "react-native";
 import Avatar from "../Avatar";
 import { TextSemiBold } from "../StyledText";
-import { getSpecializations } from "@/constants/options";
 import i18next from "i18next";
 import Pills from "../Pills";
 import DoctorLabel from "./DoctorLabel";
+import useAppContent from "@/hooks/useAppContent";
 
-export const renderDoctorRow: ListRenderItem<any> = ({ item }) => {
-  const specializationMap = Object.fromEntries(
-    getSpecializations(i18next.t).map((item) => [item.value, item.label])
-  );
+export const renderDoctorRow = ({
+  item,
+  specialties,
+}: {
+  item: any;
+  specialties: string[];
+}) => {
+  // const specializationMap = Object.fromEntries(
+  //   specialties?.map((item) => [item])
+  // );
 
   // Map the specialization IDs to their names
-  const specializations = item.specializations
-    .map((specId: string) => specializationMap[specId])
-    .filter(Boolean);
+  // const specializations = item.specializations
+  //   .map((specId: string) => specializationMap[specId])
+  //   .filter(Boolean);
 
   return (
     <Link href={`/doctor/${item.id}` as any} asChild>
@@ -41,7 +47,7 @@ export const renderDoctorRow: ListRenderItem<any> = ({ item }) => {
               </TextSemiBold>
             </View>
 
-            <Pills items={specializations} maxPills={2} />
+            <Pills items={item.specializations} maxPills={2} />
           </View>
         </View>
 

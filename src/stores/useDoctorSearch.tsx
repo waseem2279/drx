@@ -109,6 +109,7 @@ export const useFilteredDoctors = (filters: FilterState) => {
   const doctors = useDoctors();
   const { specialty, providerLanguages, services } = filters;
 
+  console.log("Filtering doctors with:", filters);
   const normalizedSpecialty = specialty?.toLowerCase();
   const normalizedLanguages = Array.isArray(providerLanguages)
     ? providerLanguages.map((lang) => lang.toLowerCase())
@@ -123,7 +124,7 @@ export const useFilteredDoctors = (filters: FilterState) => {
   if (normalizedSpecialty && normalizedSpecialty !== "all") {
     filteredDoctors = filteredDoctors.filter((doctor) =>
       doctor.specializations?.some(
-        (spec: string) => spec.toLowerCase() === normalizedSpecialty
+        (spec: string) => spec?.toString().toLowerCase() === normalizedSpecialty
       )
     );
   }

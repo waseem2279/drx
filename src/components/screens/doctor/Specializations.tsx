@@ -1,6 +1,7 @@
 import Pills from "@/components/Pills";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
 import { getSpecializations } from "@/constants/options";
+import useAppContent from "@/hooks/useAppContent";
 import i18next from "i18next";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -8,15 +9,16 @@ import { View } from "react-native";
 
 const Specializations = ({ doctor }: { doctor: any }) => {
   const { t } = useTranslation();
+  // const { specialties } = useAppContent();
 
-  const specializationMap = Object.fromEntries(
-    getSpecializations(i18next.t).map((item) => [item.value, item.label])
-  );
+  // const specializationMap = Object.fromEntries(
+  //   getSpecializations(i18next.t).map((item) => [item.value, item.label])
+  // );
 
-  // Map the specialization IDs to their names
-  const specializations = doctor?.specializations
-    .map((specId: string) => specializationMap[specId])
-    .filter(Boolean);
+  // // Map the specialization IDs to their names
+  // const specializations = doctor?.specializations
+  //   .map((specId: string) => specializationMap[specId])
+  //   .filter(Boolean);
 
   return (
     <View style={{ flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
@@ -30,7 +32,7 @@ const Specializations = ({ doctor }: { doctor: any }) => {
           gap: 8,
         }}
       >
-        <Pills items={specializations} />
+        <Pills items={doctor?.specializations} />
       </View>
     </View>
   );

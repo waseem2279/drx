@@ -4,7 +4,6 @@ import Pills from "@/components/Pills";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
 import SubmitButton from "@/components/SubmitButton";
 import Colors from "@/constants/Colors";
-import { getSpecializations } from "@/constants/options";
 import { useDoctorById } from "@/stores/useDoctorSearch";
 import { useUserData } from "@/stores/useUserStore";
 import { useStripe } from "@stripe/stripe-react-native";
@@ -21,6 +20,7 @@ import { useEffect, useState } from "react";
 import { TimeSlotInfo } from "@/types/timeSlot";
 import ControllerTimeSlotOptions from "@/components/form/ControllerTimeSlotOptions";
 import LoadingScreen from "@/components/LoadingScreen";
+import useAppContent from "@/hooks/useAppContent";
 
 type GetPaymentIntentRequest = {
   amount: number;
@@ -53,6 +53,7 @@ const BookingPage = () => {
   const userData = useUserData();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const insets = useSafeAreaInsets();
+  const { specialties } = useAppContent();
   const [timeSlots, setTimeSlots] = useState<TimeSlotInfo>({
     dates: [],
     duration: 0,
@@ -93,12 +94,9 @@ const BookingPage = () => {
     console.log(selectedDate);
   }, [doctor?.uid, selectedDate]);
 
-  const specializationMap = Object.fromEntries(
-    getSpecializations(i18next.t).map((i) => [i.value, i.label])
-  );
   const specializations =
     doctor?.specializations
-      ?.map((spec: string) => specializationMap[spec])
+      ?.map((spec: string) => specialties.find((s) => s === spec))
       .filter(Boolean) || [];
 
   const initializePaymentSheet = async ({

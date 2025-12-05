@@ -9,6 +9,7 @@ import { useFetchDoctorsByField } from "@/stores/useDoctorSearch";
 import { renderDoctorRow } from "@/components/DoctorList/DoctorListItem";
 import { useTranslation } from "react-i18next";
 import { getFilterMap } from "@/constants/options";
+import useAppContent from "@/hooks/useAppContent";
 
 type Content = {
   title: string;
@@ -20,6 +21,7 @@ type Content = {
 
 const FilteredListPage = () => {
   const { t } = useTranslation();
+  const { specialties } = useAppContent();
   const filterMap = useMemo(() => getFilterMap(t), [t]);
   const { filter } = useLocalSearchParams();
   const [doctors, setDoctors] = useState<any[]>([]);
@@ -52,7 +54,9 @@ const FilteredListPage = () => {
       <FlatList
         data={doctors}
         keyExtractor={(item) => item.id}
-        renderItem={renderDoctorRow}
+        renderItem={({ item }) =>
+          renderDoctorRow({ item: item.item, specialties })
+        }
         ListHeaderComponent={
           <View style={styles.pageHeader}>
             {content.image && (

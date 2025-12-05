@@ -15,7 +15,7 @@ import FormPage from "@/components/FormPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextSemiBold } from "@/components/StyledText";
 import UserAvatar from "@/components/UserAvatar";
-import { getDoctorLabels, getSpecializations } from "@/constants/options";
+import { getDoctorLabels } from "@/constants/options";
 import { useTranslation } from "react-i18next";
 import { getCountryOptions } from "@/constants/options";
 import ControllerAvailability from "@/components/form/ControllerAvailability";
@@ -23,11 +23,13 @@ import { PublicProfile } from "@/types/publicProfile";
 import { getCalendars } from "expo-localization";
 import ControllerLocator from "@/components/form/ControllerLocator";
 import { usePublicProfile } from "@/stores/usePublicProfileStore";
+import useAppContent from "@/hooks/useAppContent";
 
 const UpdatePublicProfile = () => {
   const { t } = useTranslation();
   const publicProfile = usePublicProfile();
   const userData = useUserData();
+  const { specialties } = useAppContent();
   const { control, handleSubmit, formState, watch, setValue } =
     useForm<PublicProfile>({
       mode: "onChange",
@@ -192,7 +194,7 @@ const UpdatePublicProfile = () => {
           rules={{
             required: t("form.at-least-one-specialization-is-required"),
           }}
-          options={getSpecializations(t)}
+          options={specialties}
         />
 
         <Divider />
