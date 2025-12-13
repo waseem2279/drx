@@ -54,9 +54,7 @@ const FilteredListPage = () => {
       <FlatList
         data={doctors}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) =>
-          renderDoctorRow({ item: item.item, specialties })
-        }
+        renderItem={({ item }) => renderDoctorRow({ item, specialties })}
         ListHeaderComponent={
           <View style={styles.pageHeader}>
             {content.image && (

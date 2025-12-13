@@ -60,7 +60,7 @@ const DoctorCarousel = () => {
             <Image
               style={styles.image}
               source={{ uri: item }} // <-- works now
-              contentFit="cover"
+              contentFit="contain"
               transition={250}
             />
           )}
