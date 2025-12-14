@@ -27,6 +27,7 @@ const updateVerificationStatus = onCall(async (request) => {
   try {
     const batch = admin.firestore().batch();
     const userRef = admin.firestore().doc(`users/${uid}`);
+    const publicProfileRef = admin.firestore().doc(`publicProfiles/${uid}`);
     const pendingVerificationRef = admin
       .firestore()
       .doc(`pendingVerifications/${uid}`);
@@ -34,6 +35,7 @@ const updateVerificationStatus = onCall(async (request) => {
     batch.update(userRef, {
       verification: updateTo,
     });
+    batch.set(publicProfileRef, { verification: updateTo }, { merge: true });
     batch.delete(pendingVerificationRef);
 
     await batch.commit();

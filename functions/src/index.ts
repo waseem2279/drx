@@ -37,4 +37,7 @@ export { getTimeSlots } from "./booking/index.js";
 // Utility functions
 export { forceQue } from "./utils/index.js";
 
-export { updateVerificationStatus } from "./utils/index.js";
+export {
+  updateVerificationStatus,
+  syncDoctorVerificationOnce,
+} from "./utils/index.js";
