@@ -24,7 +24,7 @@ import InCallManager from "react-native-incall-manager";
 export function useWebRTCCall(
   chatId: string,
   callId: string,
-  isCaller: boolean
+  isCaller: boolean,
 ) {
   // State to hold local and remote media streams
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
@@ -54,7 +54,7 @@ export function useWebRTCCall(
       try {
         const getTurnCredentials = httpsCallable(
           functions,
-          "getTurnCredentials"
+          "getTurnCredentials",
         );
         const response = await getTurnCredentials();
         const { iceServers } = response.data as { iceServers: RTCIceServer[] };
@@ -146,22 +146,22 @@ export function useWebRTCCall(
 
     peerConnection.current?.addEventListener(
       "icecandidate",
-      handleIceCandidate
+      handleIceCandidate,
     );
     peerConnection.current?.addEventListener("track", handleTrack);
     peerConnection.current?.addEventListener(
       "iceconnectionstatechange",
-      handleIceConnectionStateChange
+      handleIceConnectionStateChange,
     );
     peerConnection.current?.addEventListener("icegatheringstatechange", () => {
       console.log(
         "[ICE] Gathering state:",
-        peerConnection.current?.iceGatheringState
+        peerConnection.current?.iceGatheringState,
       );
     });
     peerConnection.current?.addEventListener(
       "negotiationneeded",
-      handleNegotiationNeeded
+      handleNegotiationNeeded,
     );
 
     // Listen to the call document, then set remote description
@@ -174,12 +174,12 @@ export function useWebRTCCall(
       ) {
         hasSetRemoteDescription.current = true;
         await peerConnection.current?.setRemoteDescription(
-          new RTCSessionDescription(data.answer)
+          new RTCSessionDescription(data.answer),
         );
 
         for (const candidate of queuedCandidates.current) {
           await peerConnection.current?.addIceCandidate(
-            new RTCIceCandidate(candidate)
+            new RTCIceCandidate(candidate),
           );
         }
         queuedCandidates.current = [];
@@ -211,17 +211,17 @@ export function useWebRTCCall(
 
     peerConnection.current?.addEventListener(
       "icecandidate",
-      handleIceCandidate
+      handleIceCandidate,
     );
     peerConnection.current?.addEventListener("track", handleTrack);
     peerConnection.current?.addEventListener(
       "iceconnectionstatechange",
-      handleIceConnectionStateChange
+      handleIceConnectionStateChange,
     );
     peerConnection.current?.addEventListener("icegatheringstatechange", () => {
       console.log(
         "[ICE] Gathering state:",
-        peerConnection.current?.iceGatheringState
+        peerConnection.current?.iceGatheringState,
       );
     });
 
@@ -240,7 +240,7 @@ export function useWebRTCCall(
         hasSetRemoteDescription.current = true;
         try {
           await peerConnection.current?.setRemoteDescription(
-            new RTCSessionDescription(data.offer)
+            new RTCSessionDescription(data.offer),
           );
           const answer = await peerConnection.current?.createAnswer();
           await peerConnection.current?.setLocalDescription(answer);
@@ -248,7 +248,7 @@ export function useWebRTCCall(
 
           for (const candidate of queuedCandidates.current) {
             await peerConnection.current?.addIceCandidate(
-              new RTCIceCandidate(candidate)
+              new RTCIceCandidate(candidate),
             );
           }
           queuedCandidates.current = [];

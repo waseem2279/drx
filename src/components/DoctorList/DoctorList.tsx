@@ -31,9 +31,12 @@ const DoctorList = ({ refresh }: Props) => {
 
   return (
     <BottomSheetFlatList
-      renderItem={({ item }) => renderDoctorRow({ item, specialties })}
+      renderItem={({ item }: { item: any }) =>
+        renderDoctorRow({ item, specialties })
+      }
       data={doctors}
       ref={listRef}
+      contentContainerStyle={{ paddingBottom: 128 }}
       ListEmptyComponent={
         <TextSemiBold style={styles.emptyListText}>
           {t("common.no-doctors-found")}
