@@ -5,8 +5,8 @@ import {
   HttpsError,
   CallableRequest,
 } from "firebase-functions/v2/https";
-const { defineSecret } = require("firebase-functions/params");
 import axios from "axios";
+import { defineSecret } from "firebase-functions/params";
 
 const turnKeyId = defineSecret("TURN_KEY_ID");
 const turnApiToken = defineSecret("TURN_API_TOKEN");
@@ -20,14 +20,14 @@ export const getTurnCredentials = onCall(
   async (request: CallableRequest<{}>) => {
     if (!turnKeyId || !turnApiToken) {
       throw new Error(
-        "TURN_KEY_ID and TURN_API_TOKEN must be defined in environment variables."
+        "TURN_KEY_ID and TURN_API_TOKEN must be defined in environment variables.",
       );
     }
 
     if (!request.auth) {
       throw new HttpsError(
         "unauthenticated",
-        "Only authenticated users can request TURN credentials."
+        "Only authenticated users can request TURN credentials.",
       );
     }
 
@@ -40,19 +40,19 @@ export const getTurnCredentials = onCall(
             Authorization: `Bearer ${turnApiToken.value()}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       return response.data; // contains `iceServers`
     } catch (err: any) {
       console.error(
         "TURN credential generation failed:",
-        err?.response?.data || err.message
+        err?.response?.data || err.message,
       );
       throw new HttpsError(
         "internal",
-        "TURN credentials could not be generated."
+        "TURN credentials could not be generated.",
       );
     }
-  }
+  },
 );
