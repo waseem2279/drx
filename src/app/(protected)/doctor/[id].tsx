@@ -9,8 +9,8 @@ import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { getLanguageOptions } from "@/constants/options";
@@ -20,6 +20,7 @@ const Page = () => {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
+
   const [doctor, setDoctor] = useState<PublicProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +46,9 @@ const Page = () => {
 
     if (id) {
       fetchDoctorProfile();
+    } else {
+      setError("Doctor profile not found");
+      setIsLoading(false);
     }
   }, [id]);
 
@@ -52,18 +56,24 @@ const Page = () => {
     router.navigate(`/doctor/booking?id=${id}`);
   };
 
+  const languageLabel = useMemo(() => {
+    if (!doctor?.languages?.length) return "-";
+
+    return doctor.languages
+      .map(
+        (code) =>
+          getLanguageOptions(t).find((opt) => opt.value === code)?.label ||
+          code,
+      )
+      .join(t("common.list-separator"));
+  }, [doctor?.languages, t]);
+
   if (isLoading) return <LoadingScreen />;
 
   if (error || !doctor) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TextRegular style={{ fontSize: 16, color: "#666" }}>
+      <View style={styles.centered}>
+        <TextRegular style={styles.errorText}>
           {error || "Doctor not found"}
         </TextRegular>
       </View>
@@ -71,132 +81,94 @@ const Page = () => {
   }
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: "#fff", paddingBottom: insets.bottom }}
-    >
+    <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingVertical: 20,
-          flexDirection: "column",
-          gap: 24,
-        }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        {/* Doctor Info */}
-        <View
-          style={{
-            flexDirection: "column",
-            gap: 16,
-            paddingBottom: 16,
-            borderBottomWidth: 1,
-            borderColor: Colors.light.faintGrey,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
+        {/* Header Card */}
+        <View style={styles.profileCard}>
+          <View style={styles.profileHeader}>
             <Avatar
-              size={48}
+              size={64}
               source={doctor.image || undefined}
               initials={
                 (doctor.firstName?.[0] || "") + (doctor.lastName?.[0] || "")
               }
             />
-            <View style={{ flex: 1 }}>
+
+            <View style={styles.profileTextWrap}>
               <TextSemiBold
-                style={{ fontSize: 20, color: "#000", textAlign: "left" }}
+                style={styles.doctorName}
+                numberOfLines={2}
+                ellipsizeMode="tail"
               >
                 Dr. {doctor.firstName} {doctor.lastName}
               </TextSemiBold>
+
+              {!!doctor.timeZone && (
+                <TextRegular style={styles.subtleText} numberOfLines={1}>
+                  {doctor.timeZone}
+                </TextRegular>
+              )}
             </View>
           </View>
 
-          <Specializations doctor={doctor} />
-        </View>
-
-        {/* Time zone */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            gap: 8,
-          }}
-        >
-          <CustomIcon name="directions-boat" size={20} color="#000" />
-          <View style={{ flexDirection: "column", gap: 8 }}>
-            <TextSemiBold
-              style={{ fontSize: 16, color: "#000", textAlign: "left" }}
-            >
-              {t("common.time-zone")}
-            </TextSemiBold>
-            <TextRegular
-              style={{
-                fontSize: 16,
-                color: Colors.light.grey,
-                textAlign: "left",
-              }}
-            >
-              {t("doctor.time-zone-description", {
-                lastName: doctor.lastName,
-                timeZone: doctor.timeZone,
-              })}
-            </TextRegular>
+          <View style={styles.specializationsWrap}>
+            <Specializations doctor={doctor} />
           </View>
         </View>
 
-        {/* Languages */}
-        <View
-          style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}
-        >
-          <Ionicons name="language" size={20} color="#000" />
-          <View style={{ flexDirection: "column", gap: 8 }}>
-            <TextSemiBold
-              style={{ fontSize: 16, color: "#000", textAlign: "left" }}
-            >
-              {t("common.languages")}
-            </TextSemiBold>
-            <TextRegular
-              style={{
-                fontSize: 16,
-                color: Colors.light.grey,
-                textAlign: "left",
-              }}
-            >
-              {t("doctor.doctor-speaks", {
-                firstName: doctor.firstName,
-                languages: doctor.languages
-                  ?.map(
-                    (code) =>
-                      getLanguageOptions(t).find((opt) => opt.value === code)
-                        ?.label || code
-                  )
-                  .join(t("common.list-separator")),
-              })}
-            </TextRegular>
-          </View>
-        </View>
+        {/* Info Card */}
+        <View style={styles.infoCard}>
+          <InfoRow
+            icon={
+              <Ionicons
+                name="time-outline"
+                size={20}
+                color={Colors.black || "#111"}
+              />
+            }
+            title={t("common.time-zone")}
+            description={t("doctor.time-zone-description", {
+              lastName: doctor.lastName,
+              timeZone: doctor.timeZone,
+            })}
+          />
 
-        <View
-          style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}
-        >
-          <CustomIcon name="briefcase" size={20} color="#000" />
-          <View style={{ flexDirection: "column", gap: 8 }}>
-            <TextSemiBold
-              style={{ fontSize: 16, color: "#000", textAlign: "left" }}
-            >
-              {t("common.experience")}
-            </TextSemiBold>
-            <TextRegular
-              style={{
-                fontSize: 16,
-                color: Colors.light.grey,
-                textAlign: "left",
-              }}
-            >
-              {t("doctor.experience-description", {
-                lastName: doctor.lastName,
-                count: Number(doctor.experience),
-              })}
-            </TextRegular>
-          </View>
+          <View style={styles.divider} />
+
+          <InfoRow
+            icon={
+              <Ionicons
+                name="language"
+                size={20}
+                color={Colors.black || "#111"}
+              />
+            }
+            title={t("common.languages")}
+            description={t("doctor.doctor-speaks", {
+              firstName: doctor.firstName,
+              languages: languageLabel,
+            })}
+          />
+
+          <View style={styles.divider} />
+
+          <InfoRow
+            icon={
+              <CustomIcon
+                name="briefcase"
+                size={20}
+                color={Colors.black || "#111"}
+              />
+            }
+            title={t("common.experience")}
+            description={t("doctor.experience-description", {
+              lastName: doctor.lastName,
+              count: Number(doctor.experience),
+            })}
+          />
         </View>
 
         <Biography doctor={doctor} />
@@ -204,38 +176,23 @@ const Page = () => {
 
       {/* Bottom CTA */}
       <View
-        style={{
-          flexDirection: "row",
-          padding: 16,
-          borderTopWidth: 1,
-          borderColor: Colors.light.faintGrey,
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "#fff",
-        }}
+        style={[styles.ctaContainer, { paddingBottom: 16 + insets.bottom }]}
       >
-        <View>
-          <TextRegular
-            style={{ fontSize: 14, color: Colors.lightText, textAlign: "left" }}
-          >
+        <View style={styles.priceBlock}>
+          <TextRegular style={styles.priceLabel}>
             {t("common.consultation-price")}
           </TextRegular>
-          <TextSemiBold
-            style={{ fontSize: 20, color: Colors.black, textAlign: "left" }}
-          >
+          <TextSemiBold style={styles.priceValue}>
             ${doctor.consultationPrice}
           </TextSemiBold>
         </View>
+
         <TouchableOpacity
-          style={{
-            backgroundColor: "#000",
-            paddingVertical: 12,
-            paddingHorizontal: 32,
-            borderRadius: 8,
-          }}
+          activeOpacity={0.85}
+          style={styles.bookButton}
           onPress={handleBooking}
         >
-          <TextSemiBold style={{ color: "#fff", fontSize: 16 }}>
+          <TextSemiBold style={styles.bookButtonText}>
             {t("comon.book")}
           </TextSemiBold>
         </TouchableOpacity>
@@ -243,5 +200,164 @@ const Page = () => {
     </View>
   );
 };
+
+type InfoRowProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+};
+
+const InfoRow = ({ icon, title, description }: InfoRowProps) => {
+  return (
+    <View style={styles.infoRow}>
+      <View style={styles.iconWrap}>{icon}</View>
+
+      <View style={styles.infoContent}>
+        <TextSemiBold style={styles.infoTitle}>{title}</TextSemiBold>
+        <TextRegular style={styles.infoDescription}>{description}</TextRegular>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
+    gap: 16,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    backgroundColor: "#F8FAFC",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#667085",
+    textAlign: "center",
+  },
+
+  profileCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#EEF2F6",
+  },
+  profileHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  profileTextWrap: {
+    flex: 1,
+    minWidth: 0,
+  },
+  doctorName: {
+    fontSize: 22,
+    lineHeight: 28,
+    color: "#101828",
+  },
+  subtleText: {
+    marginTop: 4,
+    fontSize: 14,
+    lineHeight: 20,
+    color: "#667085",
+  },
+  specializationsWrap: {
+    marginTop: 16,
+  },
+
+  infoCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#EEF2F6",
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+  },
+  iconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: "#F2F4F7",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+    marginTop: 2,
+  },
+  infoContent: {
+    flex: 1,
+    minWidth: 0,
+  },
+  infoTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: "#101828",
+    marginBottom: 4,
+  },
+  infoDescription: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: "#667085",
+    flexWrap: "wrap",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#EEF2F6",
+    marginVertical: 16,
+  },
+
+  ctaContainer: {
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderColor: "#EEF2F6",
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  priceBlock: {
+    flex: 1,
+    minWidth: 0,
+  },
+  priceLabel: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: Colors.lightText || "#667085",
+  },
+  priceValue: {
+    marginTop: 2,
+    fontSize: 24,
+    lineHeight: 30,
+    color: Colors.black || "#101828",
+  },
+  bookButton: {
+    minHeight: 48,
+    paddingHorizontal: 22,
+    borderRadius: 14,
+    backgroundColor: "#111827",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bookButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    lineHeight: 20,
+  },
+});
 
 export default Page;

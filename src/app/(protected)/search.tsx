@@ -32,6 +32,7 @@ const Page = () => {
 
   useEffect(() => {
     // Populates the initial doctor list so that filteredDoctors can be used
+    showMap();
     // TODO: Implement actual searching
     fetchSomeDoctors();
   }, []);

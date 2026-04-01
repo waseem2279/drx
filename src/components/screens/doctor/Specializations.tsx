@@ -20,6 +20,12 @@ const Specializations = ({ doctor }: { doctor: any }) => {
   //   .map((specId: string) => specializationMap[specId])
   //   .filter(Boolean);
 
+  const capitalizedSpecializations = doctor?.specializations.map(
+    (spec: string) => {
+      return spec.charAt(0).toUpperCase() + spec.slice(1);
+    },
+  );
+
   return (
     <View style={{ flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
       <TextSemiBold style={{ fontSize: 16, color: "#000", textAlign: "left" }}>
@@ -32,7 +38,7 @@ const Specializations = ({ doctor }: { doctor: any }) => {
           gap: 8,
         }}
       >
-        <Pills items={doctor?.specializations} />
+        <Pills items={capitalizedSpecializations} />
       </View>
     </View>
   );

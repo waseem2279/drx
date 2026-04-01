@@ -26,7 +26,7 @@ const DoctorCarousel = () => {
         imageUrls.map(async (path) => {
           const storageRef = ref(storage, path);
           return await getDownloadURL(storageRef);
-        })
+        }),
       );
 
       setDownloadUrls(urls);
@@ -34,8 +34,6 @@ const DoctorCarousel = () => {
 
     loadUrls();
   }, [imageUrls]);
-
-  console.log(imageUrls);
 
   return (
     downloadUrls.length > 0 && (

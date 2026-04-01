@@ -5,6 +5,7 @@ import Colors from "@/constants/Colors";
 import Avatar from "../Avatar";
 import { router } from "expo-router";
 import { Marker } from "react-native-maps";
+import { formatDoctorPrice } from "@/utils/doctorDisplay";
 
 type DoctorMarkerProps = {
   identifier: string;
@@ -51,7 +52,9 @@ const DoctorMarker = ({
         />
         <View style={styles.textContainer}>
           <TextRegular style={styles.name}>Dr. {lastName}</TextRegular>
-          <TextSemiBold style={styles.price}>${price}</TextSemiBold>
+          <TextSemiBold style={styles.price}>
+            ${formatDoctorPrice(price)}
+          </TextSemiBold>
         </View>
       </View>
     </Marker>

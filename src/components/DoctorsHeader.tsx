@@ -1,7 +1,7 @@
 import Colors from "@/constants/Colors";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TextSemiBold } from "./StyledText";
@@ -9,23 +9,26 @@ import IconButton from "./IconButton";
 import CustomIcon from "./CustomIcon";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
-import { useSetFilters } from "@/stores/useFilterStore";
+import { useFilters, useSetFilters } from "@/stores/useFilterStore";
 import useAppContent from "@/hooks/useAppContent";
 
 const DoctorsHeader = () => {
   const { t } = useTranslation();
   const setFilters = useSetFilters();
+  const filters = useFilters();
   const { specialties } = useAppContent();
-  const searchFilters = useMemo(() => specialties, [specialties]);
+  const searchFilters = useMemo(() => ["all", ...specialties], [specialties]);
   const scrollRef = useRef<typeof ScrollView | null>(null);
   const router = useRouter();
   const itemsRef = useRef<Array<typeof TouchableOpacity | null>>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const insets = useSafeAreaInsets();
+  const activeIndex = Math.max(
+    searchFilters.findIndex((item) => item === filters.specialty),
+    0
+  );
 
   const selectCategory = (index: number) => {
     const selected = itemsRef.current[index];
-    setActiveIndex(index);
 
     (selected as any)?.measure((x: number) => {
       (scrollRef.current as any)?.scrollTo({
