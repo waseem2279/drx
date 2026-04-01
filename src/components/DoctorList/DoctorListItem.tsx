@@ -8,27 +8,10 @@ import {
 } from "react-native";
 import Avatar from "../Avatar";
 import { TextSemiBold } from "../StyledText";
-import i18next from "i18next";
 import Pills from "../Pills";
 import DoctorLabel from "./DoctorLabel";
-import useAppContent from "@/hooks/useAppContent";
 
-export const renderDoctorRow = ({
-  item,
-  specialties,
-}: {
-  item: any;
-  specialties: string[];
-}) => {
-  // const specializationMap = Object.fromEntries(
-  //   specialties?.map((item) => [item])
-  // );
-
-  // Map the specialization IDs to their names
-  // const specializations = item.specializations
-  //   .map((specId: string) => specializationMap[specId])
-  //   .filter(Boolean);
-
+export const renderDoctorRow = ({ item }: { item: any }) => {
   return (
     <Link href={`/doctor/${item.id}` as any} asChild>
       <TouchableOpacity style={styles.listing}>

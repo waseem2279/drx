@@ -31,9 +31,7 @@ const DoctorList = ({ refresh }: Props) => {
 
   return (
     <BottomSheetFlatList
-      renderItem={({ item }: { item: any }) =>
-        renderDoctorRow({ item, specialties })
-      }
+      renderItem={({ item }: { item: any }) => renderDoctorRow({ item })}
       data={doctors}
       ref={listRef}
       contentContainerStyle={{ paddingBottom: 128 }}
