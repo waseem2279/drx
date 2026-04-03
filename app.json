@@ -14,10 +14,15 @@
       "appleTeamId": "46LZA2WXBP",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "CFBundleLocalizations": ["en", "ar"]
+        "CFBundleLocalizations": [
+          "en",
+          "ar"
+        ]
       },
       "entitlements": {
-        "com.apple.developer.in-app-payments": ["merchant.com.doctorx.drx"]
+        "com.apple.developer.in-app-payments": [
+          "merchant.com.doctorx.drx"
+        ]
       }
     },
     "android": {
@@ -87,7 +92,8 @@
         }
       ],
       "expo-web-browser",
-      "expo-localization"
+      "expo-localization",
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true
