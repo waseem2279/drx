@@ -105,8 +105,8 @@ const ChatRoom = () => {
       // Sort messages by createdAt in descending order
       setMessages(
         loadedMessages.sort(
-          (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-        )
+          (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+        ),
       );
     });
 
@@ -127,7 +127,7 @@ const ChatRoom = () => {
     try {
       httpsCallable(
         functions,
-        "sendMessage"
+        "sendMessage",
       )({
         chatId: chatId,
         text: message.text.trim(),
@@ -270,7 +270,7 @@ const ChatRoom = () => {
                   hour: "2-digit",
                   minute: "2-digit",
                   hour12: true, // Change to false if you prefer 24-hour format
-                }
+                },
               )
             : "";
 
@@ -298,7 +298,7 @@ const ChatRoom = () => {
           );
         }}
         renderMessageText={(props) => {
-          const { currentMessage, position } = props;
+          const { currentMessage } = props;
 
           return (
             <View
@@ -372,7 +372,7 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
       if (userData?.role === "doctor") {
         httpsCallable(
           functions,
-          "sendCallNotification"
+          "sendCallNotification",
         )({
           callId,
           calleeId: otherUser.uid,

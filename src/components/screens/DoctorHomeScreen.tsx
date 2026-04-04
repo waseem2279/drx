@@ -5,11 +5,6 @@ import {
   useStartAppointmentsListener,
   useStopAppointmentsListener,
 } from "@/stores/useAppointmentStore";
-import {
-  useExpoPushToken,
-  useNotification,
-  useNotificationError,
-} from "@/stores/useNotificationStore";
 import { useUserData } from "@/stores/useUserStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -29,10 +24,6 @@ const DoctorHomeScreen = () => {
   const error = useAppointmentError();
   const insets = useSafeAreaInsets();
 
-  const notification = useNotification();
-  const notificationError = useNotificationError();
-  const expoPushToken = useExpoPushToken();
-
   useEffect(() => {
     if (!userData?.uid) return;
     startAppointmentsListener(userData.uid);
@@ -40,7 +31,7 @@ const DoctorHomeScreen = () => {
     return () => {
       stopAppointmentsListener();
     };
-  }, []);
+  }, [startAppointmentsListener, stopAppointmentsListener, userData?.uid]);
 
   if (isFetchingAppointments) return <LoadingScreen />;
 
@@ -161,8 +152,7 @@ export const PendingAlert = () => {
           flex: 1,
         }}
       >
-        We are currently working to review your license. We'll notify you once
-        it's approved.
+        &apos;ll notify you once it&apos;s approved.
       </TextRegular>
     </View>
   );
