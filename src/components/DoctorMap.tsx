@@ -1,28 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  LayoutChangeEvent,
-  Platform,
-  Touchable,
-  TouchableOpacity,
-} from "react-native";
-import { router, useRouter } from "expo-router";
+import React, { useMemo, useState } from "react";
+import { View, StyleSheet, LayoutChangeEvent, Platform } from "react-native";
 import { useFilteredDoctors } from "@/stores/useDoctorSearch";
 import MapView, {
   Details,
-  Marker,
-  MarkerPressEvent,
   PROVIDER_DEFAULT,
-  PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import { Clusterer } from "react-native-clusterer";
-import ClusterMarker from "./map/ClusterMarker";
 import LoadingScreen from "./LoadingScreen";
-import { ClusterFeature } from "supercluster";
-import { toPointFeature } from "@/utils/mapUtils";
 import DoctorMarker from "./map/DoctorMarker";
 import { useFilters } from "@/stores/useFilterStore";
 
@@ -32,6 +16,8 @@ const INITIAL_REGION = {
   latitudeDelta: 100,
   longitudeDelta: 100,
 };
+
+const CARD_MARKER_LATITUDE_DELTA = 12;
 
 const DoctorMap = () => {
   const filters = useFilters();
@@ -55,7 +41,11 @@ const DoctorMap = () => {
       )
       .map((doctor) => {
         const { longitude, latitude } = doctor.coordinates;
-        return toPointFeature(doctor, [longitude, latitude]);
+        return {
+          ...doctor,
+          longitude,
+          latitude,
+        };
       });
   }, [doctors]);
 
@@ -70,38 +60,7 @@ const DoctorMap = () => {
     setMapDimensions({ width, height });
   };
 
-  const renderMarker = (feature: ClusterFeature<any>) => {
-    const [lng, lat] = feature.geometry.coordinates;
-    const doctorUID = feature.properties?.uid;
-
-    const isCluster = !!feature.properties?.cluster;
-    // Date.now() fixes disappearing custom markers, albeit hacky
-    const key = isCluster
-      ? `cluster-${feature.properties.cluster_id}-${Date.now()}`
-      : `point-${feature.properties.id}-${Date.now()}`;
-    const markerProps = {
-      identifier: isCluster ? doctorUID : key,
-      coordinate: { latitude: lat, longitude: lng },
-    };
-
-    return isCluster ? (
-      <ClusterMarker
-        {...markerProps}
-        key={key}
-        count={feature.properties.point_count}
-      />
-    ) : (
-      <DoctorMarker
-        {...markerProps}
-        key={key}
-        firstName={feature.properties.firstName}
-        lastName={feature.properties.lastName}
-        image={feature.properties.image}
-        uid={feature.properties.uid}
-        price={feature.properties.consultationPrice}
-      />
-    );
-  };
+  const showCardMarker = region.latitudeDelta <= CARD_MARKER_LATITUDE_DELTA;
 
   return (
     <View style={styles.container} onLayout={handleLayout}>
@@ -114,12 +73,22 @@ const DoctorMap = () => {
           region={region}
           onRegionChangeComplete={handleRegionChange}
         >
-          <Clusterer
-            data={doctorPlaces}
-            region={region}
-            mapDimensions={mapDimensions}
-            renderItem={renderMarker}
-          />
+          {doctorPlaces.map((doctor) => (
+            <DoctorMarker
+              key={doctor.id ?? doctor.uid}
+              identifier={doctor.uid ?? doctor.id}
+              coordinate={{
+                latitude: doctor.latitude,
+                longitude: doctor.longitude,
+              }}
+              firstName={doctor.firstName}
+              lastName={doctor.lastName}
+              image={doctor.image}
+              uid={doctor.uid}
+              price={doctor.consultationPrice}
+              variant={showCardMarker ? "card" : "avatar"}
+            />
+          ))}
         </MapView>
       ) : (
         <LoadingScreen />
@@ -134,14 +103,6 @@ const styles = StyleSheet.create({
   },
   mapView: {
     flex: 1,
-  },
-  markerText: {
-    fontSize: 14,
-    fontFamily: "dm-sb",
-    backgroundColor: "#fff",
-    padding: 4,
-    borderRadius: 4,
-    overflow: "hidden",
   },
 });
 
