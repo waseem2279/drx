@@ -1,4 +1,4 @@
-import expoConfig from "eslint-config-expo/flat";
+import expo from "eslint-config-expo/flat.js";
 import { defineConfig } from "eslint/config";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig([
-  expoConfig,
+  expo,
   {
     ignores: ["dist/*"],
     settings: {
