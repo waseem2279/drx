@@ -1,4 +1,3 @@
-import i18next from "i18next";
 import { Text, TextProps } from "react-native";
 
 export function TextRegular(props: TextProps) {

@@ -9,7 +9,6 @@ import {
   useWatch,
 } from "react-hook-form";
 import {
-  Pressable,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -17,7 +16,7 @@ import {
 } from "react-native";
 import { TextRegular, TextSemiBold } from "../StyledText";
 import CustomIcon from "../CustomIcon";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 import i18next from "i18next";
 import DoctorMarker from "../map/DoctorMarker";
 import { useUserData } from "@/stores/useUserStore";

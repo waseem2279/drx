@@ -1,6 +1,6 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { Ref, useMemo } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import Colors from "@/constants/Colors";
 import DoctorList from "./DoctorList/DoctorList";
 

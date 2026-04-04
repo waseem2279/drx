@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import { LinkProps, RelativePathString, router } from "expo-router";
-import React, { ReactNode } from "react";
+import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { TextRegular, TextSemiBold } from "./StyledText";
 import CustomIcon from "./CustomIcon";

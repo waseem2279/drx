@@ -12,7 +12,6 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { auth } from "../../../../firebaseConfig";
 import { useTranslation } from "react-i18next";
 
 type AllergyForm = {

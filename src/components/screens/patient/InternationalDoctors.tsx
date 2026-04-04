@@ -23,7 +23,7 @@ type Item = {
   backgroundColor: string;
 };
 
-const InternationalDoctors = ({}: {}) => {
+const InternationalDoctors = () => {
   const { t } = useTranslation();
   const countries = useMemo(() => getDoctorCountries(t), [t]);
   const onPress = (filter: string) => {

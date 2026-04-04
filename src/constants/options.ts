@@ -4,7 +4,6 @@ import Colors from "./Colors";
 import { VerificationStatus } from "@/types/user";
 import { Href } from "expo-router";
 import { PublicProfile } from "@/types/publicProfile";
-import { fi } from "date-fns/locale";
 import { FilterState } from "@/stores/useFilterStore";
 import { ImageSourcePropType } from "react-native";
 

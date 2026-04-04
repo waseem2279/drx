@@ -13,7 +13,6 @@ import {
 import { router } from "expo-router";
 import { functions } from "../../../../firebaseConfig";
 import { httpsCallable } from "@firebase/functions";
-import i18next from "i18next";
 import { getLocales } from "expo-localization";
 
 const AddPhone = () => {

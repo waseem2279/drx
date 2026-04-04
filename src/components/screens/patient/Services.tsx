@@ -1,24 +1,14 @@
 import { TextSemiBold } from "@/components/StyledText";
 import { getOurServices, ServiceItem } from "@/constants/options";
-import {
-  FilterState,
-  useClearAndSetFilters,
-  useSetFilters,
-} from "@/stores/useFilterStore";
+import { useClearAndSetFilters } from "@/stores/useFilterStore";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
-import { Href, router } from "expo-router";
+import { router } from "expo-router";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ImageSourcePropType,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
-const Services = ({}: {}) => {
+const Services = () => {
   const { t } = useTranslation();
   const clearAndSetFilters = useClearAndSetFilters();
   const services = useMemo(() => getOurServices(t), [t]);

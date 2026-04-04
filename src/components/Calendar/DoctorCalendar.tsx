@@ -1,4 +1,4 @@
-import React, { use, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Colors from "@/constants/Colors";
 import { useAppointments } from "@/stores/useAppointmentStore";
@@ -7,7 +7,7 @@ import {
   getDayWidth,
   getLocaleData,
 } from "@/utils/calendarUtils";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { router } from "expo-router";
 import { I18nManager, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars";
@@ -19,7 +19,7 @@ import IconButton from "../IconButton";
 import { TextSemiBold } from "../StyledText";
 import CustomIcon from "../CustomIcon";
 import { locales } from "@/constants/locales";
-import i18next, { TFunction } from "i18next";
+import i18next from "i18next";
 import { enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 
@@ -32,7 +32,7 @@ const DoctorCalendar = () => {
   } | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyy-MM-dd") // Default to today's date
+    format(new Date(), "yyyy-MM-dd"), // Default to today's date
   );
 
   // Set the locale for the calendar
@@ -40,7 +40,7 @@ const DoctorCalendar = () => {
     if (!locales[i18next.language]) return;
     LocaleConfig.locales[i18next.language] = getLocaleData(
       locales[i18next.language],
-      t
+      t,
     );
     LocaleConfig.defaultLocale = i18next.language;
   }, [i18next.language, t]);
@@ -71,8 +71,8 @@ const DoctorCalendar = () => {
         ? "chevron-left"
         : "chevron-right"
       : direction === "right"
-      ? "chevron-right"
-      : "chevron-left";
+        ? "chevron-right"
+        : "chevron-left";
 
     return <IconButton name={resolvedDirection} pointerEvents="none" />;
   };
@@ -151,7 +151,7 @@ const DoctorCalendar = () => {
         </TouchableOpacity>
       );
     },
-    [selectedDate, calendarDimensions]
+    [selectedDate, calendarDimensions],
   );
 
   return (

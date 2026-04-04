@@ -1,6 +1,6 @@
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
-import { StyleSheet, Touchable, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomIcon from "./CustomIcon";
 import { router } from "expo-router";
 

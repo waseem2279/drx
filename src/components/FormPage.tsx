@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import useGradualAnimation from "@/hooks/useGradualAnimation";
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import Footer from "./AddFooter";

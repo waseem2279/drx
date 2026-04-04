@@ -20,7 +20,7 @@ const DoctorsHeader = () => {
   const searchFilters = useMemo(() => ["all", ...specialties], [specialties]);
   const scrollRef = useRef<typeof ScrollView | null>(null);
   const router = useRouter();
-  const itemsRef = useRef<Array<typeof TouchableOpacity | null>>([]);
+  const itemsRef = useRef<(typeof TouchableOpacity | null)[]>([]);
   const insets = useSafeAreaInsets();
   const activeIndex = Math.max(
     searchFilters.findIndex((item) => item === filters.specialty),

@@ -23,7 +23,7 @@ const MessagesHeader = ({ setFilter }: Props) => {
   const { t } = useTranslation();
   const tabs = useMemo(() => getTabs(t), [t]);
   const scrollRef = useRef<ScrollView | null>(null);
-  const itemsRef = useRef<Array<typeof TouchableOpacity | null>>([]);
+  const itemsRef = useRef<(typeof TouchableOpacity | null)[]>([]);
   const colorScheme = useColorScheme();
   const [activeIndex, setActiveIndex] = useState(0);
   const insets = useSafeAreaInsets();

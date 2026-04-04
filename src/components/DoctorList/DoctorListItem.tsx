@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TouchableOpacity, View, StyleSheet  } from "react-native";
 import Avatar from "../Avatar";
 import { TextSemiBold } from "../StyledText";
 import Pills from "../Pills";
@@ -9,7 +9,6 @@ import {
   formatDoctorPrice,
   getDoctorLicensedCountryPills,
 } from "@/utils/doctorDisplay";
-import { Text } from "react-native";
 
 export const renderDoctorRow = ({ item }: { item: any }) => {
   const licensedCountryPills = getDoctorLicensedCountryPills(item.countries);

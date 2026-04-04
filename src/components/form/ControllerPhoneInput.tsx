@@ -10,7 +10,7 @@ import {
 } from "react-hook-form";
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import { IconName } from "../../constants/iconsMap";
-import { TextRegular, TextSemiBold } from "../StyledText";
+import { TextRegular } from "../StyledText";
 import i18next from "i18next";
 import MaskInput from "react-native-mask-input";
 import {

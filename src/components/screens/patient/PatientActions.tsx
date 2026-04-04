@@ -11,7 +11,6 @@ import { getPatientActions } from "@/constants/options";
 import {
   FilterState,
   useClearAndSetFilters,
-  useSetFilters,
 } from "@/stores/useFilterStore";
 
 type PatientActionButton = {
@@ -22,7 +21,7 @@ type PatientActionButton = {
   filters: FilterState;
 };
 
-const PatientActions = ({}: {}) => {
+const PatientActions = () => {
   const { t } = useTranslation();
   const clearAndSetFilters = useClearAndSetFilters();
   const patientActions = useMemo(() => getPatientActions(t), [t]);

@@ -10,7 +10,6 @@ import { useStripe } from "@stripe/stripe-react-native";
 import * as Linking from "expo-linking";
 import { router, useLocalSearchParams } from "expo-router";
 import { httpsCallable } from "firebase/functions";
-import i18next from "i18next";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Alert, ScrollView, View } from "react-native";

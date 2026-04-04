@@ -12,7 +12,7 @@ import {
 } from "@/stores/useNotificationStore";
 import { useUserData } from "@/stores/useUserStore";
 import { Ionicons } from "@expo/vector-icons";
-import { router, Stack } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

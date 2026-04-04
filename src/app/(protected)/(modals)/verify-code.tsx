@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { useState } from "react";
 import FormPage from "@/components/FormPage";
 import { TextRegular } from "@/components/StyledText";

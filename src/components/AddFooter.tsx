@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
   interpolate,
   SharedValue,
@@ -7,7 +7,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SubmitButton from "./SubmitButton";
-import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
 const Footer = ({

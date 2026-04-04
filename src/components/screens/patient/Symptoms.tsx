@@ -20,7 +20,7 @@ type TabItem = {
   filter: string | undefined;
 };
 
-const Symptoms = ({}: {}) => {
+const Symptoms = () => {
   const { t } = useTranslation();
   const patientSymptoms = useMemo(() => getPatientSymptoms(t), [t]);
   const onPress = (item: TabItem) => {
