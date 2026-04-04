@@ -101,7 +101,7 @@ export default function RootLayout() {
         unsubscribePresence(); // presence listener
       }
     };
-  }, []);
+  }, [setIsAuthReady, startUserListener, stopUserListener]);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -181,7 +181,4 @@ function RootLayoutNav() {
       </KeyboardProvider>
     </GestureHandlerRootView>
   );
-}
-function startUserListener(uid: string) {
-  throw new Error("Function not implemented.");
 }

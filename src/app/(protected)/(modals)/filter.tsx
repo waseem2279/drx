@@ -3,7 +3,6 @@ import FormPage from "@/components/FormPage";
 import { getLanguageOptions, getServiceOptions } from "@/constants/options";
 import { useFilters, useSetFilters } from "@/stores/useFilterStore";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 
 interface LanguageFormValues {
@@ -57,13 +56,5 @@ const Page = () => {
     </FormPage>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    width: 64,
-    height: 43,
-    borderRadius: 16,
-  },
-});
 
 export default Page;
