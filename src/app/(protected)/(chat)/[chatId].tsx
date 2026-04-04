@@ -351,15 +351,15 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
   const chatData = useChatsById(chatId as string);
   const isDoctor = userData?.role === "doctor";
 
-  if (!chatData) {
+  const otherUser = isDoctor
+    ? chatData?.participants.patient
+    : chatData?.participants.doctor;
+
+  const presence = useUserPresence(otherUser?.uid);
+
+  if (!chatData || !otherUser) {
     return null; // or a loading spinner
   }
-
-  const otherUser = isDoctor
-    ? chatData.participants.patient
-    : chatData.participants.doctor;
-
-  const presence = useUserPresence(otherUser.uid);
   const callId = getChatId(userData?.uid as string, otherUser.uid);
 
   const handleCall = async () => {

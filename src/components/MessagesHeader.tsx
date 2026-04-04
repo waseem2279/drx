@@ -2,13 +2,7 @@ import Colors from "@/constants/Colors";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import IconButton from "./IconButton";
 import { TextRegular, TextSemiBold } from "./StyledText";
@@ -24,24 +18,12 @@ const MessagesHeader = ({ setFilter }: Props) => {
   const tabs = useMemo(() => getTabs(t), [t]);
   const scrollRef = useRef<ScrollView | null>(null);
   const itemsRef = useRef<(typeof TouchableOpacity | null)[]>([]);
-  const colorScheme = useColorScheme();
   const [activeIndex, setActiveIndex] = useState(0);
   const insets = useSafeAreaInsets();
 
   const selectCategory = (filter: string, index: number) => {
-    const selected = itemsRef.current[index] as View | null;
     setFilter(filter);
     setActiveIndex(index);
-
-    // if (selected && scrollRef.current) {
-    //   selected.measure((fx, fy, width, height, px, py) => {
-    //     scrollRef.current?.scrollTo({
-    //       x: px - 16,
-    //       y: 0,
-    //       animated: true,
-    //     });
-    //   });
-    // }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
