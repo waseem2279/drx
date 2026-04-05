@@ -1,10 +1,11 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React from "react";
 import { TextRegular, TextSemiBold } from "../StyledText";
 import Colors from "@/constants/Colors";
 import Avatar from "../Avatar";
 import { router } from "expo-router";
 import { Marker } from "react-native-maps";
+import { formatDoctorPrice } from "@/utils/doctorDisplay";
 
 type DoctorMarkerProps = {
   identifier: string;
@@ -18,6 +19,7 @@ type DoctorMarkerProps = {
   uid: string;
   price: string;
   shouldNavigate?: boolean;
+  variant?: "avatar" | "card";
 };
 
 const DoctorMarker = ({
@@ -29,7 +31,10 @@ const DoctorMarker = ({
   uid,
   price,
   shouldNavigate = true,
+  variant = "card",
 }: DoctorMarkerProps) => {
+  const isAvatarOnly = variant === "avatar";
+
   return (
     <Marker
       identifier={identifier} // Becomes nativeEvent.id
@@ -43,17 +48,29 @@ const DoctorMarker = ({
         })
       }
     >
-      <View style={styles.bubble}>
-        <Avatar
-          initials={`${firstName?.charAt(0)}${lastName?.charAt(0)}`}
-          source={image}
-          size={28}
-        />
-        <View style={styles.textContainer}>
-          <TextRegular style={styles.name}>Dr. {lastName}</TextRegular>
-          <TextSemiBold style={styles.price}>${price}</TextSemiBold>
+      {isAvatarOnly ? (
+        <View style={styles.avatarBubble}>
+          <Avatar
+            initials={`${firstName?.charAt(0)}${lastName?.charAt(0)}`}
+            source={image}
+            size={40}
+          />
         </View>
-      </View>
+      ) : (
+        <View style={styles.bubble}>
+          <Avatar
+            initials={`${firstName?.charAt(0)}${lastName?.charAt(0)}`}
+            source={image}
+            size={28}
+          />
+          <View style={styles.textContainer}>
+            <TextRegular style={styles.name}>Dr. {lastName}</TextRegular>
+            <TextSemiBold style={styles.price}>
+              ${formatDoctorPrice(price)}
+            </TextSemiBold>
+          </View>
+        </View>
+      )}
     </Marker>
   );
 };
@@ -71,7 +88,6 @@ const styles = StyleSheet.create({
   },
   bubble: {
     flex: 0,
-
     flexDirection: "row",
     alignSelf: "flex-start",
     gap: 4,
@@ -80,6 +96,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 12,
     borderRadius: 12,
+    borderColor: Colors.faintGrey,
+    borderWidth: 1,
+  },
+  avatarBubble: {
+    alignSelf: "flex-start",
+    backgroundColor: "#FFF",
+    padding: 4,
+    borderRadius: 999,
     borderColor: Colors.faintGrey,
     borderWidth: 1,
   },

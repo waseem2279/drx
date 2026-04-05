@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import React from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 
 import Colors from "@/constants/Colors";
@@ -15,15 +15,41 @@ import FormPage from "@/components/FormPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextSemiBold } from "@/components/StyledText";
 import UserAvatar from "@/components/UserAvatar";
-import { getDoctorLabels } from "@/constants/options";
+import { getDoctorLabels , getCountryOptions } from "@/constants/options";
 import { useTranslation } from "react-i18next";
-import { getCountryOptions } from "@/constants/options";
 import ControllerAvailability from "@/components/form/ControllerAvailability";
-import { PublicProfile } from "@/types/publicProfile";
+import {
+  AVAILABILITY_DAY_KEYS,
+  PublicProfile,
+  type Availability,
+} from "@/types/publicProfile";
 import { getCalendars } from "expo-localization";
 import ControllerLocator from "@/components/form/ControllerLocator";
 import { usePublicProfile } from "@/stores/usePublicProfileStore";
 import useAppContent from "@/hooks/useAppContent";
+
+const buildEmptyAvailability = (): Availability =>
+  AVAILABILITY_DAY_KEYS.reduce<Availability>((acc, dayKey) => {
+    acc[dayKey] = [];
+    return acc;
+  }, {} as Availability);
+
+const normalizeAvailability = (value: unknown): Availability => {
+  const fallback = buildEmptyAvailability();
+
+  if (!value || typeof value !== "object") {
+    return fallback;
+  }
+
+  const source = value as Record<string, unknown>;
+
+  AVAILABILITY_DAY_KEYS.forEach((dayKey) => {
+    const normalizedDay = source[dayKey];
+    fallback[dayKey] = Array.isArray(normalizedDay) ? normalizedDay : [];
+  });
+
+  return fallback;
+};
 
 const UpdatePublicProfile = () => {
   const { t } = useTranslation();
@@ -34,7 +60,7 @@ const UpdatePublicProfile = () => {
     useForm<PublicProfile>({
       mode: "onChange",
       defaultValues: async () => {
-        const fallback: any = {
+        const fallback: PublicProfile = {
           doctorLabel: "doctor",
           coordinates: null,
           specializations: [],
@@ -43,16 +69,14 @@ const UpdatePublicProfile = () => {
           biography: "",
           countries: [],
           consultationDuration: "15",
-          timeZone: getCalendars()[0].timeZone,
-          availability: {
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-          },
+          timeZone: getCalendars()[0].timeZone ?? null,
+          availability: buildEmptyAvailability(),
+          services: [],
+          consultationPrice: "",
+          secondOpinionPrice: "",
+          weightLossPrice: "",
+          radiologyPrice: "",
+          inHomeCarePrice: "",
         };
 
         if (!publicProfile) return fallback;
@@ -60,13 +84,14 @@ const UpdatePublicProfile = () => {
         return {
           ...fallback,
           ...publicProfile, // This takes precedence over fallback, overwriting any defaults
+          availability: normalizeAvailability(publicProfile.availability),
         };
       },
     });
 
   const { isDirty, isValid, isSubmitting, isLoading } = formState;
 
-  const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
+  const onSubmit: SubmitHandler<PublicProfile> = async (formData) => {
     if (!userData) return;
     try {
       await setDoc(

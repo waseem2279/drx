@@ -19,7 +19,7 @@ import {
 import CustomIcon from "../CustomIcon";
 import { IconName } from "../../constants/iconsMap";
 import { TextRegular } from "../StyledText";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface ControllerInputProps<TFieldValues extends FieldValues> {
   label: string;
@@ -50,6 +50,7 @@ const ControllerInput = <TFieldValues extends FieldValues>({
   autoFocus = false,
   shouldRemoveWhitespace = false,
 }: ControllerInputProps<TFieldValues>) => {
+  const { i18n } = useTranslation();
   const [showSensitive, setShowSensitive] = useState(false);
 
   return (
@@ -86,8 +87,8 @@ const ControllerInput = <TFieldValues extends FieldValues>({
               style={[
                 styles.input,
                 {
-                  textAlign: i18next.dir() === "rtl" ? "right" : "left",
-                  writingDirection: i18next.dir() === "rtl" ? "rtl" : "ltr",
+                  textAlign: i18n.dir() === "rtl" ? "right" : "left",
+                  writingDirection: i18n.dir() === "rtl" ? "rtl" : "ltr",
                   maxHeight: multiline ? 120 : 40,
                 },
                 textInputStyle,

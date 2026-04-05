@@ -12,7 +12,7 @@ const Pills = ({ items, maxPills }: { items: string[]; maxPills?: number }) => {
       {pillsToShow.map((specializationName: string, index: number) => {
         return (
           <View key={index} style={styles.pill}>
-            <TextRegular style={styles.pillText}>
+            <TextRegular numberOfLines={1} style={styles.pillText}>
               {specializationName}
             </TextRegular>
           </View>
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 4,
     marginTop: 4,
+    alignItems: "center",
+    maxWidth: "100%",
   },
   pill: {
     borderRadius: 12,
@@ -42,10 +44,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderColor: Colors.faintGrey,
     borderWidth: 1,
+    backgroundColor: "#FFF",
+    maxWidth: "100%",
   },
   pillText: {
     fontSize: 12,
     color: Colors.black,
-    textTransform: "capitalize",
+    flexShrink: 1,
   },
 });

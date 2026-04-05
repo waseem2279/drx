@@ -1,37 +1,21 @@
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
-import {
-  ListRenderItem,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
+import { TouchableOpacity, View, StyleSheet  } from "react-native";
 import Avatar from "../Avatar";
 import { TextSemiBold } from "../StyledText";
-import i18next from "i18next";
 import Pills from "../Pills";
 import DoctorLabel from "./DoctorLabel";
-import useAppContent from "@/hooks/useAppContent";
+import {
+  formatDoctorPrice,
+  getDoctorLicensedCountryPills,
+} from "@/utils/doctorDisplay";
 
-export const renderDoctorRow = ({
-  item,
-  specialties,
-}: {
-  item: any;
-  specialties: string[];
-}) => {
-  // const specializationMap = Object.fromEntries(
-  //   specialties?.map((item) => [item])
-  // );
-
-  // Map the specialization IDs to their names
-  // const specializations = item.specializations
-  //   .map((specId: string) => specializationMap[specId])
-  //   .filter(Boolean);
+export const renderDoctorRow = ({ item }: { item: any }) => {
+  const licensedCountryPills = getDoctorLicensedCountryPills(item.countries);
 
   return (
     <Link href={`/doctor/${item.id}` as any} asChild>
-      <TouchableOpacity style={styles.listing}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.listing}>
         <View style={styles.left}>
           <Avatar
             source={item.image}
@@ -41,19 +25,19 @@ export const renderDoctorRow = ({
 
           <View style={styles.info}>
             <View style={styles.nameAndLabel}>
-              <TextSemiBold style={{ fontSize: 16 }}>
+              <TextSemiBold numberOfLines={1} style={styles.nameText}>
                 {item.firstName} {item.lastName}{" "}
                 <DoctorLabel label={item.doctorLabel} />
               </TextSemiBold>
             </View>
 
-            <Pills items={item.specializations} maxPills={2} />
+            <Pills items={licensedCountryPills} maxPills={1} />
           </View>
         </View>
 
         <View style={styles.price}>
           <TextSemiBold style={styles.priceText}>
-            ${item.consultationPrice}
+            ${formatDoctorPrice(item.consultationPrice)}
           </TextSemiBold>
         </View>
       </TouchableOpacity>
@@ -63,42 +47,56 @@ export const renderDoctorRow = ({
 
 const styles = StyleSheet.create({
   listing: {
-    paddingVertical: 12,
+    height: 80,
+    display: "flex",
     paddingHorizontal: 16,
+    paddingVertical: 8,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: Colors.faintGrey,
+    backgroundColor: "#FFF",
   },
   left: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
+    alignItems: "flex-start",
+    gap: 12,
+    flex: 1,
+    minWidth: 0,
   },
   info: {
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "space-between",
+    flex: 1,
+    minWidth: 0,
   },
   nameAndLabel: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+    marginTop: 2,
+    width: "100%",
   },
-  specializations: {
-    textTransform: "capitalize",
-    color: Colors.grey,
+  nameText: {
+    fontSize: 16,
+    flexShrink: 1,
   },
   price: {
-    height: 64,
-    width: 64,
-    borderRadius: 10,
-    alignItems: "center",
+    display: "flex",
+    height: "100%",
+    padding: 16,
+    borderRadius: 12,
+    alignSelf: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
   },
   priceText: {
+    display: "flex",
+    alignItems: "center",
+    textAlign: "center",
     fontSize: 16,
   },
 });

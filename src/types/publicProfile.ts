@@ -1,17 +1,26 @@
-type TimeSlot = {
-  time: Date;
-  duration: number;
+export type TimeValue = {
+  hour: number;
+  minute: number;
 };
 
-type Availability = {
-  sunday: TimeSlot[];
-  monday: TimeSlot[];
-  tuesday: TimeSlot[];
-  wednesday: TimeSlot[];
-  thursday: TimeSlot[];
-  friday: TimeSlot[];
-  saturday: TimeSlot[];
+export type AvailabilitySlot = {
+  start: TimeValue | null;
+  end: TimeValue | null;
 };
+
+export const AVAILABILITY_DAY_KEYS = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+] as const;
+
+export type AvailabilityDayKey = (typeof AVAILABILITY_DAY_KEYS)[number];
+
+export type Availability = Record<AvailabilityDayKey, AvailabilitySlot[]>;
 
 export type PublicProfile = {
   doctorLabel: "doctor" | "nurse" | "intern";

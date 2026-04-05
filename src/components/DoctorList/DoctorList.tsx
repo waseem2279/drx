@@ -1,7 +1,7 @@
 import Colors from "@/constants/Colors";
 import { useFilteredDoctors } from "@/stores/useDoctorSearch";
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { TextSemiBold } from "../StyledText";
 import { renderDoctorRow } from "./DoctorListItem";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,6 @@ import {
   BottomSheetFlatListMethods,
 } from "@gorhom/bottom-sheet";
 import { useFilters } from "@/stores/useFilterStore";
-import useAppContent from "@/hooks/useAppContent";
 
 interface Props {
   refresh?: number;
@@ -18,7 +17,6 @@ interface Props {
 
 const DoctorList = ({ refresh }: Props) => {
   const { t } = useTranslation();
-  const { specialties } = useAppContent();
   const filters = useFilters();
   const doctors = useFilteredDoctors(filters);
   const listRef = useRef<BottomSheetFlatListMethods>(null);
@@ -31,9 +29,10 @@ const DoctorList = ({ refresh }: Props) => {
 
   return (
     <BottomSheetFlatList
-      renderItem={({ item }) => renderDoctorRow({ item, specialties })}
+      renderItem={({ item }: { item: any }) => renderDoctorRow({ item })}
       data={doctors}
       ref={listRef}
+      contentContainerStyle={{ paddingBottom: 128 }}
       ListEmptyComponent={
         <TextSemiBold style={styles.emptyListText}>
           {t("common.no-doctors-found")}

@@ -4,7 +4,6 @@ import Colors from "@/constants/Colors";
 import { formatTime } from "@/utils/callUtils";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
-import { useTranslation } from "react-i18next";
 import { I18nManager, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

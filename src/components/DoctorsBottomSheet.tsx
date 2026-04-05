@@ -1,13 +1,15 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { Ref, useMemo } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import Colors from "@/constants/Colors";
 import DoctorList from "./DoctorList/DoctorList";
 
 const DoctorsBottomSheet = ({
+  handleSheetChanges,
   bottomSheetRef,
   refresh,
 }: {
+  handleSheetChanges: (index: number) => void;
   bottomSheetRef: Ref<BottomSheet>;
   refresh: number;
 }) => {
@@ -19,10 +21,11 @@ const DoctorsBottomSheet = ({
       style={styles.sheetContainer}
       backgroundStyle={styles.bottomSheetBackground}
       snapPoints={snapPoints}
-      index={2}
+      index={1}
       ref={bottomSheetRef}
       handleIndicatorStyle={{ backgroundColor: Colors.light.grey }}
       enablePanDownToClose={false}
+      onChange={handleSheetChanges}
     >
       <DoctorList refresh={refresh} />
     </BottomSheet>

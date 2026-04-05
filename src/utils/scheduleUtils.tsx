@@ -1,6 +1,5 @@
-import { parse } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
-import { datetime, RRule, RRuleSet, rrulestr } from "rrule";
+import { datetime, RRule } from "rrule";
 
 export const getScheduleFromRRule = (requestedDate: string) => {
   // Get these from publicProfile

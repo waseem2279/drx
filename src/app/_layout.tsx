@@ -25,7 +25,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { auth } from "../../firebaseConfig";
 import { SessionProvider } from "../contexts/AuthContext";
 import "../i18n/config";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -101,7 +101,7 @@ export default function RootLayout() {
         unsubscribePresence(); // presence listener
       }
     };
-  }, []);
+  }, [setIsAuthReady, startUserListener, stopUserListener]);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -122,6 +122,8 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { t } = useTranslation();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider>
@@ -141,7 +143,7 @@ function RootLayoutNav() {
                 <Stack.Screen
                   name="signup"
                   options={{
-                    title: i18next.t("signup.sign-up-with-drx"),
+                    title: t("signup.sign-up-with-drx"),
                     header: (props) => <PageHeader {...props} />,
                   }}
                 />
@@ -149,28 +151,28 @@ function RootLayoutNav() {
                   name="forgot-password"
                   options={{
                     presentation: "modal",
-                    title: i18next.t("page.recover-your-password"),
+                    title: t("page.recover-your-password"),
                     header: (props) => <PageHeader {...props} />,
                   }}
                 />
                 <Stack.Screen
                   name="terms-of-service"
                   options={{
-                    title: i18next.t("page.terms-of-service"),
+                    title: t("page.terms-of-service"),
                     header: (props) => <PageHeader {...props} />,
                   }}
                 />
                 <Stack.Screen
                   name="privacy-policy"
                   options={{
-                    title: i18next.t("page.privacy-policy"),
+                    title: t("page.privacy-policy"),
                     header: (props) => <PageHeader {...props} />,
                   }}
                 />
                 <Stack.Screen
                   name="support"
                   options={{
-                    title: i18next.t("page.contact-us"),
+                    title: t("page.contact-us"),
                     header: (props) => <PageHeader {...props} />,
                   }}
                 />
@@ -181,7 +183,4 @@ function RootLayoutNav() {
       </KeyboardProvider>
     </GestureHandlerRootView>
   );
-}
-function startUserListener(uid: string) {
-  throw new Error("Function not implemented.");
 }

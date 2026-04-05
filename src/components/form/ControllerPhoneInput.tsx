@@ -10,8 +10,7 @@ import {
 } from "react-hook-form";
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import { IconName } from "../../constants/iconsMap";
-import { TextRegular, TextSemiBold } from "../StyledText";
-import i18next from "i18next";
+import { TextRegular } from "../StyledText";
 import MaskInput from "react-native-mask-input";
 import {
   CountryCode,
@@ -43,7 +42,7 @@ const ControllerPhoneInput = <TFieldValues extends FieldValues>({
   textInputStyle = null,
   autoFocus = false,
 }: ControllerPhoneInputProps<TFieldValues>) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [mask, setMask] = useState<(string | RegExp)[]>([
     "+",
     "1",
@@ -70,7 +69,7 @@ const ControllerPhoneInput = <TFieldValues extends FieldValues>({
     try {
       const example = getExampleNumber(
         country.code,
-        examples
+        examples,
       )?.formatNational();
       setPlaceholder(example);
       if (example) {
@@ -121,8 +120,8 @@ const ControllerPhoneInput = <TFieldValues extends FieldValues>({
                 style={[
                   styles.input,
                   {
-                    textAlign: i18next.dir() === "rtl" ? "right" : "left",
-                    writingDirection: i18next.dir() === "rtl" ? "rtl" : "ltr",
+                    textAlign: i18n.dir() === "rtl" ? "right" : "left",
+                    writingDirection: i18n.dir() === "rtl" ? "rtl" : "ltr",
                   },
                   textInputStyle,
                 ]}

@@ -12,7 +12,7 @@ export async function uploadFile(fileUri: string, storagePath: string) {
   const blob: Blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => resolve(xhr.response);
-    xhr.onerror = (e) => reject(new TypeError("Network request failed"));
+    xhr.onerror = () => reject(new TypeError("Network request failed"));
     xhr.responseType = "blob";
     xhr.open("GET", fileUri, true);
     xhr.send(null);

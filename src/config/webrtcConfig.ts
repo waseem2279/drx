@@ -25,4 +25,4 @@ export const sessionConstraints = {
     OfferToReceiveVideo: true,
     VoiceActivityDetection: true,
   },
-};
+} as RTCOfferOptions;

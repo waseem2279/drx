@@ -24,7 +24,7 @@ const useDoctorStore = create<DoctorStoreState>((set, get) => ({
     if (!field || values.length === 0) return [];
 
     const cacheKey = `${field}:${values.sort().join(",")}`;
-    const { cache, doctors } = get();
+    const { cache } = get();
 
     if (cache[cacheKey]) {
       // Optionally, merge cached doctors into the state
@@ -124,8 +124,9 @@ export const useFilteredDoctors = (filters: FilterState) => {
   if (normalizedSpecialty && normalizedSpecialty !== "all") {
     filteredDoctors = filteredDoctors.filter((doctor) =>
       doctor.specializations?.some(
-        (spec: string) => spec?.toString().toLowerCase() === normalizedSpecialty
-      )
+        (spec: string) =>
+          spec?.toString().toLowerCase() === normalizedSpecialty,
+      ),
     );
   }
 
@@ -133,8 +134,8 @@ export const useFilteredDoctors = (filters: FilterState) => {
   if (normalizedLanguages.length > 0) {
     filteredDoctors = filteredDoctors.filter((doctor) =>
       doctor.languages?.some((lang: string) =>
-        normalizedLanguages.includes(lang.toLowerCase())
-      )
+        normalizedLanguages.includes(lang.toLowerCase()),
+      ),
     );
   }
 
@@ -142,8 +143,8 @@ export const useFilteredDoctors = (filters: FilterState) => {
   if (normalizedServices.length > 0) {
     filteredDoctors = filteredDoctors.filter((doctor) =>
       doctor.services?.some((service: string) =>
-        normalizedServices.includes(service.toLowerCase())
-      )
+        normalizedServices.includes(service.toLowerCase()),
+      ),
     );
   }
 

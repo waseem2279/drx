@@ -18,7 +18,7 @@ const MedicalInfo = () => {
 
   useEffect(() => {
     startRecordsListener();
-  }, []);
+  }, [startRecordsListener]);
 
   if (isFetchingRecords) return <LoadingScreen />;
 

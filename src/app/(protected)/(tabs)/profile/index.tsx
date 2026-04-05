@@ -9,7 +9,6 @@ import { useUserData } from "@/stores/useUserStore";
 import { Link, RelativePathString } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SubmitButton from "@/components/SubmitButton";
-import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { getDoctorLinks, getPatientLinks } from "@/constants/options";
 import { useEffect, useState } from "react";
@@ -161,7 +160,7 @@ const Profile = () => {
       {/* Logout button */}
       <SubmitButton
         style={{ marginTop: 16, width: "100%" }}
-        text={i18next.t("button.log-out")}
+        text={t("button.log-out")}
         onPress={signOut}
       />
     </PageScrollView>

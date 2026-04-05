@@ -37,12 +37,12 @@ const Avatar = ({
       opacity.value = withRepeat(
         withTiming(0.3, { duration: 700, easing: Easing.inOut(Easing.ease) }),
         -1,
-        true
+        true,
       );
     } else {
       opacity.value = withTiming(1);
     }
-  }, [loading]);
+  }, [loading, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

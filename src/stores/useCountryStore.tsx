@@ -15,7 +15,7 @@ interface CountryStoreState {
   setInternationalPhoneNumber: (phoneNumber: string) => void;
 }
 
-const useCountryStore = create<CountryStoreState>((set, get) => ({
+const useCountryStore = create<CountryStoreState>((set) => ({
   country: {
     name: "United States",
     code: "US",

@@ -14,6 +14,11 @@ const Page = () => {
   const [refresh, setRefresh] = useState(0);
   const [mapVisible, setMapVisible] = useState(false);
 
+  const handleSheetChanges = (index: number) => {
+    if (index === 0) setMapVisible(true);
+    else setMapVisible(false);
+  };
+
   const showMap = () => {
     // TODO: Implement a more robust way to toggle the map visibility
     if (mapVisible) {
@@ -27,6 +32,7 @@ const Page = () => {
 
   useEffect(() => {
     // Populates the initial doctor list so that filteredDoctors can be used
+    showMap();
     // TODO: Implement actual searching
     fetchSomeDoctors();
   }, []);
@@ -40,7 +46,11 @@ const Page = () => {
       />
       <MapButton onPress={showMap} />
       <DoctorMap />
-      <DoctorsBottomSheet bottomSheetRef={bottomSheetRef} refresh={refresh} />
+      <DoctorsBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        refresh={refresh}
+        handleSheetChanges={handleSheetChanges}
+      />
     </View>
   );
 };

@@ -5,7 +5,6 @@ import {
   doc,
   getDoc,
   serverTimestamp,
-  setDoc,
   updateDoc,
   WriteBatch,
 } from "@firebase/firestore";

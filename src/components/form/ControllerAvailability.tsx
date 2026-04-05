@@ -1,55 +1,171 @@
+import Colors from "@/constants/Colors";
+import {
+  AVAILABILITY_DAY_KEYS,
+  Availability,
+  AvailabilityDayKey,
+  AvailabilitySlot,
+} from "@/types/publicProfile";
+import { getCalendars } from "expo-localization";
 import React from "react";
-import { View, StyleSheet } from "react-native";
 import {
   Control,
-  useFieldArray,
-  Path,
+  FieldArray,
+  FieldArrayPath,
   FieldValues,
+  Path,
+  PathValue,
   UseFormSetValue,
   UseFormWatch,
+  useFieldArray,
 } from "react-hook-form";
-import { TextRegular, TextSemiBold } from "../StyledText";
-import Colors from "@/constants/Colors";
-import { getCalendars } from "expo-localization";
-import ControllerTimePicker from "./ControllerTimePicker";
+import { StyleSheet, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import IconButton from "../IconButton";
+import { TextRegular, TextSemiBold } from "../StyledText";
+import ControllerTimePicker from "./ControllerTimePicker";
 
 const BUTTON_SIZE = 28;
 
-interface ControllerAvailabilityProps<TFieldValues extends FieldValues> {
+type AvailabilityFormValues = FieldValues & {
+  availability: Availability;
+  timeZone: string | null;
+};
+
+interface ControllerAvailabilityProps<
+  TFieldValues extends AvailabilityFormValues,
+> {
   label: string;
-  control: Control<any>;
+  control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   setValue: UseFormSetValue<TFieldValues>;
   watch: UseFormWatch<TFieldValues>;
 }
 
-const WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const WEEK_DAYS_MAP: Record<number, string> = {
-  0: "sunday",
-  1: "monday",
-  2: "tuesday",
-  3: "wednesday",
-  4: "thursday",
-  5: "friday",
-  6: "saturday",
-};
+interface AvailabilityDayRowProps<TFieldValues extends AvailabilityFormValues> {
+  control: Control<TFieldValues>;
+  name: Path<TFieldValues>;
+  dayKey: AvailabilityDayKey;
+}
 
-const newTimeSlot = {
+const newTimeSlot: AvailabilitySlot = {
   start: null,
   end: null,
 };
 
-const ControllerAvailability = <TFieldValues extends FieldValues>({
+const weekdayLabelKey: Record<AvailabilityDayKey, string> = {
+  "0": "Sun",
+  "1": "Mon",
+  "2": "Tue",
+  "3": "Wed",
+  "4": "Thu",
+  "5": "Fri",
+  "6": "Sat",
+};
+
+const AvailabilityDayRow = <TFieldValues extends AvailabilityFormValues>({
+  control,
+  name,
+  dayKey,
+}: AvailabilityDayRowProps<TFieldValues>) => {
+  const { t } = useTranslation();
+  const fieldArrayName = `${name}.${dayKey}` as FieldArrayPath<TFieldValues>;
+  const { fields, append, remove } = useFieldArray<TFieldValues>({
+    control,
+    name: fieldArrayName,
+  });
+
+  return (
+    <View style={styles.dayContainer}>
+      {fields.length === 0 ? (
+        <View style={styles.timeSlotRow}>
+          <TextRegular style={styles.dayLabel}>
+            {t(`weekdays.${weekdayLabelKey[dayKey]}`)}
+          </TextRegular>
+          <TextRegular style={styles.noSlotsText}>
+            {t("form.unavailable")}
+          </TextRegular>
+          <View style={styles.buttonRow}>
+            <View style={styles.empty} />
+            <IconButton
+              name="add"
+              size={BUTTON_SIZE}
+              onPress={() =>
+                append(
+                  newTimeSlot as FieldArray<
+                    TFieldValues,
+                    typeof fieldArrayName
+                  >,
+                )
+              }
+            />
+          </View>
+        </View>
+      ) : (
+        fields.map((field, timeSlotIdx) => (
+          <View key={field.id} style={styles.timeSlotRow}>
+            {timeSlotIdx === 0 ? (
+              <TextRegular style={styles.dayLabel}>
+                {t(`weekdays.${weekdayLabelKey[dayKey]}`)}
+              </TextRegular>
+            ) : (
+              <View style={styles.dayLabel} />
+            )}
+            <View style={styles.inlineSlot}>
+              <ControllerTimePicker<TFieldValues>
+                name={
+                  `${fieldArrayName}.${timeSlotIdx}.start` as Path<TFieldValues>
+                }
+                placeholder={t("form.start-time")}
+                control={control}
+                rules={{ required: t("form.start-time-is-required") }}
+              />
+              <TextSemiBold>-</TextSemiBold>
+              <ControllerTimePicker<TFieldValues>
+                name={
+                  `${fieldArrayName}.${timeSlotIdx}.end` as Path<TFieldValues>
+                }
+                placeholder={t("form.end-time")}
+                control={control}
+                rules={{ required: t("form.end-time-is-required") }}
+              />
+            </View>
+            <View style={styles.buttonRow}>
+              <IconButton
+                name="close"
+                size={BUTTON_SIZE}
+                onPress={() => remove(timeSlotIdx)}
+              />
+              {timeSlotIdx === 0 ? (
+                <IconButton
+                  name="add"
+                  size={BUTTON_SIZE}
+                  onPress={() =>
+                    append(
+                      newTimeSlot as FieldArray<
+                        TFieldValues,
+                        typeof fieldArrayName
+                      >,
+                    )
+                  }
+                />
+              ) : (
+                <View style={styles.empty} />
+              )}
+            </View>
+          </View>
+        ))
+      )}
+    </View>
+  );
+};
+
+const ControllerAvailability = <TFieldValues extends AvailabilityFormValues>({
   label,
   control,
   name,
   setValue,
   watch,
 }: ControllerAvailabilityProps<TFieldValues>) => {
-  const { t } = useTranslation();
-
   return (
     <View>
       <View style={styles.labelContainer}>
@@ -64,93 +180,26 @@ const ControllerAvailability = <TFieldValues extends FieldValues>({
             onPress={() => {
               const timeZone = getCalendars()[0].timeZone;
               if (!timeZone) return;
-              setValue("timeZone" as Path<TFieldValues>, timeZone as any, {
-                shouldDirty: true,
-              });
+              setValue(
+                "timeZone" as Path<TFieldValues>,
+                timeZone as PathValue<TFieldValues, Path<TFieldValues>>,
+                {
+                  shouldDirty: true,
+                },
+              );
             }}
           />
         </View>
       </View>
 
-      {WEEK.map((day, dayIdx) => {
-        // availability.day
-        const formName = `${name}.${dayIdx}` as const;
-        const dayName = WEEK[dayIdx];
-        const { fields, append, remove } = useFieldArray({
-          control,
-          name: formName as any,
-        });
-
-        return (
-          <View key={day} style={styles.dayContainer}>
-            {fields.length === 0 ? (
-              <View style={styles.timeSlotRow}>
-                <TextRegular style={styles.dayLabel}>
-                  {t(`weekdays.${dayName}`)}
-                </TextRegular>
-                <TextRegular style={styles.noSlotsText}>
-                  {t("form.unavailable")}
-                </TextRegular>
-                <View style={styles.buttonRow}>
-                  <View style={styles.empty} />
-                  <IconButton
-                    name="add"
-                    size={BUTTON_SIZE}
-                    onPress={() => append(newTimeSlot)}
-                  />
-                </View>
-              </View>
-            ) : (
-              fields.map((field, timeSlotIdx) => (
-                <View key={field.id} style={[styles.timeSlotRow]}>
-                  {timeSlotIdx === 0 ? (
-                    <TextRegular style={styles.dayLabel}>
-                      {t(`weekdays.${dayName}`)}
-                    </TextRegular>
-                  ) : (
-                    <View style={styles.dayLabel} />
-                  )}
-                  <View style={styles.inlineSlot}>
-                    <ControllerTimePicker
-                      name={
-                        `${formName}.${timeSlotIdx}.start` as Path<TFieldValues>
-                      }
-                      placeholder={t("form.start-time")}
-                      control={control}
-                      rules={{ required: t("form.start-time-is-required") }}
-                    />
-                    <TextSemiBold>-</TextSemiBold>
-                    <ControllerTimePicker
-                      name={
-                        `${formName}.${timeSlotIdx}.end` as Path<TFieldValues>
-                      }
-                      placeholder={t("form.end-time")}
-                      control={control}
-                      rules={{ required: t("form.end-time-is-required") }}
-                    />
-                  </View>
-                  <View style={styles.buttonRow}>
-                    <IconButton
-                      name="close"
-                      size={BUTTON_SIZE}
-                      onPress={() => remove(timeSlotIdx)}
-                    />
-                    {timeSlotIdx === 0 ? (
-                      <IconButton
-                        name="add"
-                        size={BUTTON_SIZE}
-                        onPress={() => append(newTimeSlot)}
-                      />
-                    ) : (
-                      <View style={styles.empty} />
-                    )}
-                  </View>
-                </View>
-              ))
-            )}
-          </View>
-        );
-      })}
+      {AVAILABILITY_DAY_KEYS.map((dayKey) => (
+        <AvailabilityDayRow<TFieldValues>
+          key={dayKey}
+          control={control}
+          name={name}
+          dayKey={dayKey}
+        />
+      ))}
     </View>
   );
 };

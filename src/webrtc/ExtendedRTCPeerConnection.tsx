@@ -16,11 +16,7 @@ class EventTargetPolyfill {
     [type: string]: Set<EventListenerOrEventListenerObject>;
   } = {};
 
-  addEventListener(
-    type: string,
-    callback: EventListenerOrEventListenerObject,
-    options?: boolean | AddEventListenerOptions
-  ) {
+  addEventListener(type: string, callback: EventListenerOrEventListenerObject) {
     if (!this.listeners[type]) {
       this.listeners[type] = new Set();
     }
@@ -30,7 +26,6 @@ class EventTargetPolyfill {
   removeEventListener(
     type: string,
     callback: EventListenerOrEventListenerObject,
-    options?: boolean | EventListenerOptions
   ) {
     if (this.listeners[type]) {
       this.listeners[type].delete(callback);
@@ -94,20 +89,15 @@ class ExtendedRTCPeerConnection extends OriginalRTCPeerConnection {
     }
   }
 
-  addEventListener(
-    type: string,
-    listener: EventListenerOrEventListenerObject,
-    options?: boolean | AddEventListenerOptions
-  ) {
-    this._eventTarget.addEventListener(type, listener, options);
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject) {
+    this._eventTarget.addEventListener(type, listener);
   }
 
   removeEventListener(
     type: string,
     listener: EventListenerOrEventListenerObject,
-    options?: boolean | EventListenerOptions
   ) {
-    this._eventTarget.removeEventListener(type, listener, options);
+    this._eventTarget.removeEventListener(type, listener);
   }
 
   dispatchEvent(event: { type: string; detail?: any }): boolean {

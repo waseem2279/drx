@@ -1,25 +1,31 @@
 import Colors from "@/constants/Colors";
 import React from "react";
-import { Control, Controller, RegisterOptions } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
+} from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { TextRegular } from "../StyledText";
 import CustomIcon from "../CustomIcon";
 
-interface Props {
+interface Props<TFieldValues extends FieldValues> {
   label: string;
-  control: Control<any>;
-  rules?: RegisterOptions;
-  name: string;
+  control: Control<TFieldValues>;
+  rules?: RegisterOptions<TFieldValues, Path<TFieldValues>>;
+  name: Path<TFieldValues>;
   timeSlots?: string[];
 }
 
-const ControllerTimeSlotOptions: React.FC<Props> = ({
+const ControllerTimeSlotOptions = <TFieldValues extends FieldValues>({
   label,
   control,
   rules = {},
   name,
   timeSlots = [],
-}) => {
+}: Props<TFieldValues>) => {
   return (
     <Controller
       control={control}

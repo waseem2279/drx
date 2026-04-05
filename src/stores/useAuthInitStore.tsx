@@ -5,7 +5,7 @@ interface AuthInitStoreState {
   setIsAuthReady: (isReady: boolean) => void;
 }
 
-const useAuthInitStore = create<AuthInitStoreState>((set, get) => ({
+const useAuthInitStore = create<AuthInitStoreState>((set) => ({
   isAuthReady: false,
   setIsAuthReady: (isReady: boolean) => set({ isAuthReady: isReady }),
 }));

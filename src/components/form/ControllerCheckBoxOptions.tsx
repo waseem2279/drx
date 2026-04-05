@@ -1,6 +1,12 @@
 import Colors from "@/constants/Colors";
 import React from "react";
-import { Control, Controller, RegisterOptions } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
+} from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { TextRegular } from "../StyledText";
 import CustomIcon from "../CustomIcon";
@@ -10,11 +16,11 @@ interface Option {
   label: string;
 }
 
-interface Props {
+interface Props<TFieldValues extends FieldValues> {
   label: string;
-  control: Control<any>;
-  rules?: RegisterOptions;
-  name: string;
+  control: Control<TFieldValues>;
+  rules?: RegisterOptions<TFieldValues, Path<TFieldValues>>;
+  name: Path<TFieldValues>;
   options?: (string | Option)[];
   singleSelect?: boolean;
 }
@@ -29,14 +35,14 @@ const normalizeOptions = (options: (string | Option)[]): Option[] =>
       : option
   );
 
-const ControllerCheckBoxOptions: React.FC<Props> = ({
+const ControllerCheckBoxOptions = <TFieldValues extends FieldValues>({
   label,
   control,
   rules = {},
   name,
   options = [],
   singleSelect = false,
-}) => {
+}: Props<TFieldValues>) => {
   const normalizedOptions = normalizeOptions(options);
 
   return (
