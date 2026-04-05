@@ -4,8 +4,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { TextRegular, TextSemiBold } from "./StyledText";
 import CustomIcon from "./CustomIcon";
-import i18next from "i18next";
 import { IconName } from "@/constants/iconsMap";
+import { useTranslation } from "react-i18next";
 
 export type IconProperties = {
   name: IconName;
@@ -27,6 +27,8 @@ const PageListLink = ({
   onPress,
   icon,
 }: PageListLinkProps) => {
+  const { i18n } = useTranslation();
+
   const handlePress = () => {
     if (onPress) {
       onPress();
@@ -53,7 +55,7 @@ const PageListLink = ({
           <TextRegular style={styles.description}>{description}</TextRegular>
         </View>
         <CustomIcon
-          name={i18next.dir() === "ltr" ? "chevron-right" : "chevron-left"}
+          name={i18n.dir() === "ltr" ? "chevron-right" : "chevron-left"}
           size={24}
           color="#000"
         />

@@ -19,12 +19,11 @@ import IconButton from "../IconButton";
 import { TextSemiBold } from "../StyledText";
 import CustomIcon from "../CustomIcon";
 import { locales } from "@/constants/locales";
-import i18next from "i18next";
 import { enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 
 const DoctorCalendar = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const appointments = useAppointments();
   const [calendarDimensions, setCalendarDimensions] = useState<{
     width: number;
@@ -37,13 +36,13 @@ const DoctorCalendar = () => {
 
   // Set the locale for the calendar
   useEffect(() => {
-    if (!locales[i18next.language]) return;
-    LocaleConfig.locales[i18next.language] = getLocaleData(
-      locales[i18next.language],
+    if (!locales[i18n.language]) return;
+    LocaleConfig.locales[i18n.language] = getLocaleData(
+      locales[i18n.language],
       t,
     );
-    LocaleConfig.defaultLocale = i18next.language;
-  }, [i18next.language, t]);
+    LocaleConfig.defaultLocale = i18n.language;
+  }, [i18n.language, t]);
 
   const onLayout = (event: {
     nativeEvent: { layout: { width: number; height: number } };
@@ -95,7 +94,7 @@ const DoctorCalendar = () => {
           }}
         >
           {format(dateObj, "LLLL, yyyy", {
-            locale: locales[i18next.language] ?? enUS,
+            locale: locales[i18n.language] ?? enUS,
           })}
         </TextSemiBold>
       </TouchableOpacity>
@@ -171,7 +170,7 @@ const DoctorCalendar = () => {
       />
 
       <DatePicker
-        locale={i18next.language}
+        locale={i18n.language}
         modal
         mode="date"
         open={showDatePicker}

@@ -7,13 +7,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TextSemiBold } from "./StyledText";
 import IconButton from "./IconButton";
 import CustomIcon from "./CustomIcon";
-import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { useFilters, useSetFilters } from "@/stores/useFilterStore";
 import useAppContent from "@/hooks/useAppContent";
 
 const DoctorsHeader = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const setFilters = useSetFilters();
   const filters = useFilters();
   const { specialties } = useAppContent();
@@ -24,7 +23,7 @@ const DoctorsHeader = () => {
   const insets = useSafeAreaInsets();
   const activeIndex = Math.max(
     searchFilters.findIndex((item) => item === filters.specialty),
-    0
+    0,
   );
 
   const selectCategory = (index: number) => {
@@ -47,7 +46,7 @@ const DoctorsHeader = () => {
       <View style={styles.actionRow}>
         <IconButton
           size={40}
-          name={i18next.dir() === "rtl" ? "arrow-forward" : "arrow-back"}
+          name={i18n.dir() === "rtl" ? "arrow-forward" : "arrow-back"}
           onPress={() => router.back()}
         />
         <TouchableOpacity

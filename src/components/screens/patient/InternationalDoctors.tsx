@@ -5,7 +5,6 @@ import { getDoctorCountries } from "@/constants/options";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import i18next from "i18next";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -24,7 +23,7 @@ type Item = {
 };
 
 const InternationalDoctors = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const countries = useMemo(() => getDoctorCountries(t), [t]);
   const onPress = (filter: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -69,7 +68,7 @@ const InternationalDoctors = () => {
             <View style={styles.bottomText}>
               <TextSemiBold style={styles.text}>{item.name}</TextSemiBold>
               <CustomIcon
-                name={i18next.dir() === "ltr" ? "arrow-forward" : "arrow-back"}
+                name={i18n.dir() === "ltr" ? "arrow-forward" : "arrow-back"}
                 size={20}
                 color="#000"
               />

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import MaskInput from "react-native-mask-input";
 import { TextRegular } from "../StyledText";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface ControllerOTPInputProps<TFieldValues extends FieldValues> {
   label: string;
@@ -31,6 +31,7 @@ const ControllerOTPInput = <TFieldValues extends FieldValues>({
   autoFocus = false,
   digits = 6,
 }: ControllerOTPInputProps<TFieldValues>) => {
+  const { i18n } = useTranslation();
   const [maskedValue, setMaskedValue] = useState("");
 
   const mask = Array(digits).fill(/\d/); // e.g. [/d/, /d/, /d/, /d/, /d/, /d/]
@@ -67,7 +68,7 @@ const ControllerOTPInput = <TFieldValues extends FieldValues>({
                 styles.input,
                 {
                   textAlign: "center",
-                  writingDirection: i18next.dir() === "rtl" ? "rtl" : "ltr",
+                  writingDirection: i18n.dir() === "rtl" ? "rtl" : "ltr",
                 },
                 textInputStyle,
               ]}

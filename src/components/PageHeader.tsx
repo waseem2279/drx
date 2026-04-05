@@ -4,7 +4,7 @@ import { Platform, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import IconButton from "./IconButton";
 import { TextSemiBold } from "./StyledText";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 const HEADER_HEIGHT = 56;
 
@@ -14,6 +14,7 @@ const PageHeader = ({
   options,
   back,
 }: NativeStackHeaderProps) => {
+  const { i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const title = getHeaderTitle(options, route.name);
   const headerRight = options.headerRight;
@@ -35,9 +36,9 @@ const PageHeader = ({
             name={
               isModal
                 ? "close"
-                : i18next.dir() === "ltr"
-                ? "arrow-back"
-                : "arrow-forward"
+                : i18n.dir() === "ltr"
+                  ? "arrow-back"
+                  : "arrow-forward"
             }
             onPress={navigation.goBack}
           />

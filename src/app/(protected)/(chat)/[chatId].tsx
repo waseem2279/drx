@@ -27,7 +27,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { db, functions } from "../../../../firebaseConfig";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
 // Import ar and en locales from dayjs
 import "dayjs/locale/ar";
 import "dayjs/locale/en";
@@ -48,7 +47,7 @@ interface User {
 }
 
 const ChatRoom = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [status, setStatus] = useState<{
@@ -150,7 +149,7 @@ const ChatRoom = () => {
         }}
       />
       <GiftedChat
-        locale={i18next.language}
+        locale={i18n.language}
         placeholder={t("chat.type-a-message")}
         renderInputToolbar={(props) => {
           return (
@@ -253,7 +252,7 @@ const ChatRoom = () => {
               }}
             >
               <TextRegular style={{ color: Colors.lightText, fontSize: 12 }}>
-                {date.toLocaleDateString(i18next.language, {
+                {date.toLocaleDateString(i18n.language, {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
@@ -265,7 +264,7 @@ const ChatRoom = () => {
         renderTime={(props) => {
           const time = props.currentMessage.createdAt
             ? new Date(props.currentMessage.createdAt).toLocaleTimeString(
-                i18next.language,
+                i18n.language,
                 {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -345,7 +344,7 @@ const ChatRoom = () => {
 export default ChatRoom;
 
 const ChatHeader = ({ chatId }: { chatId: string }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const userData = useUserData();
   const chatData = useChatsById(chatId as string);
@@ -400,7 +399,7 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
     <View style={[header.container, { paddingTop: insets.top }]}>
       <View style={header.left}>
         <IconButton
-          name={i18next.dir() === "ltr" ? "arrow-back" : "arrow-forward"}
+          name={i18n.dir() === "ltr" ? "arrow-back" : "arrow-forward"}
           onPress={() => router.back()}
         />
         <View style={header.chatInfo}>

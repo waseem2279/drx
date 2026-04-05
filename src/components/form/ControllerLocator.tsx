@@ -8,16 +8,10 @@ import {
   FieldValues,
   useWatch,
 } from "react-hook-form";
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { TextRegular, TextSemiBold } from "../StyledText";
 import CustomIcon from "../CustomIcon";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
-import i18next from "i18next";
 import DoctorMarker from "../map/DoctorMarker";
 import { useUserData } from "@/stores/useUserStore";
 import OrDivider from "../OrDivider";
@@ -36,7 +30,7 @@ const ControllerLocator = <T extends FieldValues>({
   name,
   rules = {},
 }: ControllerLocatorProps<T>) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const TITLE = t("form.place-of-practice-optional");
   const SUBTITLE = t("form.locator-subtitle");
 
@@ -122,8 +116,8 @@ const ControllerLocator = <T extends FieldValues>({
                   style={[
                     styles.input,
                     {
-                      textAlign: i18next.dir() === "rtl" ? "right" : "left",
-                      writingDirection: i18next.dir() === "rtl" ? "rtl" : "ltr",
+                      textAlign: i18n.dir() === "rtl" ? "right" : "left",
+                      writingDirection: i18n.dir() === "rtl" ? "rtl" : "ltr",
                     },
                   ]}
                   onBlur={onBlur}
