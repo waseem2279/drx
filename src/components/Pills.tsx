@@ -32,6 +32,7 @@ export default Pills;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 4,
     marginTop: 4,
     alignItems: "center",
