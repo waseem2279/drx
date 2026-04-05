@@ -1,29 +1,46 @@
 import Colors from "@/constants/Colors";
+import { TimeValue } from "@/types/publicProfile";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { Control, Controller } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
+} from "react-hook-form";
 import { Pressable, StyleSheet, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 import { TextRegular } from "../StyledText";
 import i18next from "i18next";
 import { locales } from "@/constants/locales";
 
-const ControllerTimePicker = ({
+interface ControllerTimePickerProps<TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: Path<TFieldValues>;
+  rules?: RegisterOptions<TFieldValues, Path<TFieldValues>>;
+  label?: string;
+  disabled?: boolean;
+  placeholder?: string;
+}
+
+const isTimeValue = (value: unknown): value is TimeValue =>
+  typeof value === "object" &&
+  value !== null &&
+  "hour" in value &&
+  "minute" in value &&
+  typeof value.hour === "number" &&
+  typeof value.minute === "number";
+
+const ControllerTimePicker = <TFieldValues extends FieldValues>({
   control,
   name,
   rules = {},
   label,
   disabled = false,
   placeholder = "Select Time",
-}: {
-  control: Control;
-  name: string;
-  rules?: any;
-  label?: string;
-  disabled?: boolean;
-  placeholder?: string;
-}) => {
+}: ControllerTimePickerProps<TFieldValues>) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   return (
@@ -32,11 +49,11 @@ const ControllerTimePicker = ({
       name={name}
       rules={rules}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        //Convert {hour, minute} into a Date objectq
-        const dateValue = value
+        const hasTimeValue = isTimeValue(value);
+        const dateValue = hasTimeValue
           ? new Date(0, 0, 0, value.hour, value.minute)
           : new Date();
-        const displayValue = dateValue
+        const displayValue = hasTimeValue
           ? format(dateValue, "h:mm a", { locale: locales[i18next.language] })
           : "";
 
@@ -45,7 +62,7 @@ const ControllerTimePicker = ({
             <View style={styles.labelContainer}>
               {label && <TextRegular style={styles.label}>{label}</TextRegular>}
               {error && (
-                <TextRegular style={styles.error}>{error?.message}</TextRegular>
+                <TextRegular style={styles.error}>{error.message}</TextRegular>
               )}
             </View>
 
@@ -56,8 +73,10 @@ const ControllerTimePicker = ({
                 { borderColor: error ? Colors.pink : Colors.faintGrey },
               ]}
             >
-              <TextRegular style={{ color: value ? "#000" : Colors.lightText }}>
-                {value ? displayValue : placeholder}
+              <TextRegular
+                style={{ color: hasTimeValue ? "#000" : Colors.lightText }}
+              >
+                {hasTimeValue ? displayValue : placeholder}
               </TextRegular>
               <Ionicons name="time-outline" size={20} color={Colors.grey} />
             </Pressable>
