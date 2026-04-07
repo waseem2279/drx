@@ -55,7 +55,7 @@ const WelcomeMessage = ({ name, role }: { name: string; role: string }) => {
   const color = role === "patient" ? Colors.primary : Colors.gold;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.welcomeContainer}>
       <TextRegular style={styles.welcomeText}>
         {t("header.welcome-back")}
       </TextRegular>
@@ -79,7 +79,7 @@ const WelcomeMessage = ({ name, role }: { name: string; role: string }) => {
 export default UserRow;
 
 const styles = StyleSheet.create({
-  container: { justifyContent: "center", alignItems: "flex-start" },
+  welcomeContainer: { justifyContent: "center", alignItems: "flex-start" },
   welcomeText: {
     color: Colors.grey,
     fontSize: 14,

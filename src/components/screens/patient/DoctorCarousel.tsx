@@ -37,7 +37,7 @@ const DoctorCarousel = () => {
 
   return (
     downloadUrls.length > 0 && (
-      <View style={styles.container}>
+      <View style={styles.doctorCarouselContainer}>
         <TextSemiBold style={styles.header}>Featured doctors</TextSemiBold>
 
         <Carousel
@@ -71,7 +71,7 @@ const DoctorCarousel = () => {
 export default DoctorCarousel;
 
 const styles = StyleSheet.create({
-  container: {
+  doctorCarouselContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",

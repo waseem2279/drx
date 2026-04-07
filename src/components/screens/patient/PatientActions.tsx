@@ -1,17 +1,14 @@
 import CustomIcon from "@/components/CustomIcon";
 import { IconName } from "@/constants/iconsMap";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import * as Haptics from "expo-haptics";
 import { Href, router } from "expo-router";
 import React, { useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { getPatientActions } from "@/constants/options";
-import {
-  FilterState,
-  useClearAndSetFilters,
-} from "@/stores/useFilterStore";
+import { FilterState, useClearAndSetFilters } from "@/stores/useFilterStore";
+import { useTheme } from "@/hooks/useTheme";
 
 type PatientActionButton = {
   name: string;
@@ -23,6 +20,7 @@ type PatientActionButton = {
 
 const PatientActions = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const clearAndSetFilters = useClearAndSetFilters();
   const patientActions = useMemo(() => getPatientActions(t), [t]);
 
@@ -35,7 +33,7 @@ const PatientActions = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.patientActionsContainer}>
       <TextSemiBold style={styles.header}>
         {t("home.patient-actions")}
       </TextSemiBold>
@@ -43,16 +41,21 @@ const PatientActions = () => {
         <TouchableOpacity
           key={index}
           onPress={() => onPress(item.href, item.filters)}
-          style={styles.action}
+          style={[styles.action, { borderColor: colors.border }]}
         >
           <CustomIcon
             name={item.icon as IconName}
             size={24}
-            color={Colors.black}
+            color={colors.foreground}
           />
           <View style={styles.actionRight}>
             <TextSemiBold style={styles.actionName}>{item.name}</TextSemiBold>
-            <TextRegular style={styles.actionDescription}>
+            <TextRegular
+              style={[
+                styles.actionDescription,
+                { color: colors.mutedForeground },
+              ]}
+            >
               {item.description}
             </TextRegular>
           </View>
@@ -65,7 +68,7 @@ const PatientActions = () => {
 export default PatientActions;
 
 const styles = StyleSheet.create({
-  container: {
+  patientActionsContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -79,11 +82,9 @@ const styles = StyleSheet.create({
   },
   actionName: {
     fontSize: 14,
-    color: Colors.black,
   },
   actionDescription: {
     fontSize: 14,
-    color: Colors.grey,
   },
   action: {
     width: "100%",
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: Colors.faintGrey,
   },
   actionRight: {
     flexDirection: "column",

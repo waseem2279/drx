@@ -1,4 +1,3 @@
-import { View, StyleSheet } from "react-native";
 import React from "react";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { TextRegular } from "@/components/StyledText";
@@ -11,6 +10,7 @@ import ControllerInput from "@/components/form/ControllerInput";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../firebaseConfig";
 import Colors from "@/constants/Colors";
+import ContainerView from "@/components/ContainerView";
 
 const UpdateService = () => {
   const { t } = useTranslation();
@@ -52,7 +52,7 @@ const UpdateService = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <Stack.Screen
         options={{
           title: t("page.manage-service"),
@@ -84,23 +84,8 @@ const UpdateService = () => {
           textInputStyle={{ width: "100%" }}
         />
       </FormPage>
-    </View>
+    </ContainerView>
   );
 };
 
 export default UpdateService;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  pageScrollViewContent: {
-    flexDirection: "column",
-    gap: 16,
-    padding: 16,
-  },
-  multilineInputStyle: {
-    height: 128,
-  },
-});

@@ -43,7 +43,7 @@ const CountryCodes = () => {
           </TextRegular>
         </TouchableOpacity>
       )}
-      contentContainerStyle={{ paddingBottom: 48 }}
+      contentContainerStyle={{ paddingBottom: 48, paddingHorizontal: 16 }}
       style={{ backgroundColor: "#fff", height: 256 }}
       showsVerticalScrollIndicator={false}
     />

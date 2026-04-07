@@ -18,7 +18,7 @@ const AddPhone = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.addPhoneContainer}>
       <TextRegular style={styles.label}>{t("form.phone-number")}</TextRegular>
       <View style={styles.phoneInfo}>
         {userData?.phoneNumber && (
@@ -40,7 +40,7 @@ const AddPhone = () => {
 export default AddPhone;
 
 const styles = StyleSheet.create({
-  container: {
+  addPhoneContainer: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",

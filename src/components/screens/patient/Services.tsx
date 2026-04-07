@@ -22,7 +22,7 @@ const Services = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.servicesContainer}>
       <TextSemiBold style={styles.header}>
         {t("home.our-services")}
       </TextSemiBold>
@@ -64,7 +64,7 @@ const Services = () => {
 
 export default Services;
 const styles = StyleSheet.create({
-  container: {
+  servicesContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",

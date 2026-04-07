@@ -8,7 +8,7 @@ const Pills = ({ items, maxPills }: { items: string[]; maxPills?: number }) => {
   const remaining = !!maxPills ? items.length - maxPills : 0;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.pillsContainer}>
       {pillsToShow.map((specializationName: string, index: number) => {
         return (
           <View key={index} style={styles.pill}>
@@ -30,7 +30,7 @@ const Pills = ({ items, maxPills }: { items: string[]; maxPills?: number }) => {
 export default Pills;
 
 const styles = StyleSheet.create({
-  container: {
+  pillsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 4,

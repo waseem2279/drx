@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { getLanguageOptions } from "@/constants/options";
 import { PublicProfile } from "@/types/publicProfile";
+import ContainerView from "@/components/ContainerView";
 
 const Page = () => {
   const { t } = useTranslation();
@@ -81,7 +82,7 @@ const Page = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -197,7 +198,7 @@ const Page = () => {
           </TextSemiBold>
         </TouchableOpacity>
       </View>
-    </View>
+    </ContainerView>
   );
 };
 
@@ -221,10 +222,6 @@ const InfoRow = ({ icon, title, description }: InfoRowProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 16,

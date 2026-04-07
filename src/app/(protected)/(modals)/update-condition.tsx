@@ -1,5 +1,6 @@
 import { saveItem } from "@/api/medicalRecords";
 import Footer from "@/components/AddFooter";
+import ContainerView from "@/components/ContainerView";
 import ControllerInput from "@/components/form/ControllerInput";
 import PageScrollView from "@/components/PageScrollView";
 import useGradualAnimation from "@/hooks/useGradualAnimation";
@@ -57,11 +58,11 @@ const UpdateCondition = () => {
   }));
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <Stack.Screen
         options={{
           title: `${isEditMode ? t("common.edit") : t("common.add")} ${t(
-            "common.condition"
+            "common.condition",
           )}`,
         }}
       />
@@ -78,7 +79,7 @@ const UpdateCondition = () => {
           name="comments"
           label={t("form.comment-on-your-condition")}
           placeholder={t(
-            "form.e-g-i-have-to-monitor-my-blood-sugar-levels-daily"
+            "form.e-g-i-have-to-monitor-my-blood-sugar-levels-daily",
           )}
           multiline
           textInputStyle={styles.multilineInputStyle}
@@ -93,17 +94,13 @@ const UpdateCondition = () => {
       />
 
       <Animated.View style={fakeView} />
-    </View>
+    </ContainerView>
   );
 };
 
 export default UpdateCondition;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   pageScrollViewContent: {
     flexDirection: "column",
     padding: 16,

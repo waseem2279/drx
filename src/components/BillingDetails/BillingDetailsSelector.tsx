@@ -66,7 +66,7 @@ const BillingDetailsSelector = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.billingDetailsContainer}>
       <TextSemiBold style={styles.billingAddressTitle}>
         Billing address
       </TextSemiBold>
@@ -85,7 +85,7 @@ const BillingDetailsSelector = ({
                   onPress={() => handleAddressSelect(index)}
                   showBorder={index < billingAddresses.length - 1}
                 />
-              )
+              ),
             )}
           </View>
           <TouchableOpacity onPress={handleFormVisibility}>
@@ -102,7 +102,7 @@ const BillingDetailsSelector = ({
 export default BillingDetailsSelector;
 
 const styles = StyleSheet.create({
-  container: {
+  billingDetailsContainer: {
     flexDirection: "column",
     gap: 8,
   },

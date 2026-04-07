@@ -15,7 +15,7 @@ import FormPage from "@/components/FormPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TextSemiBold } from "@/components/StyledText";
 import UserAvatar from "@/components/UserAvatar";
-import { getDoctorLabels , getCountryOptions } from "@/constants/options";
+import { getDoctorLabels, getCountryOptions } from "@/constants/options";
 import { useTranslation } from "react-i18next";
 import ControllerAvailability from "@/components/form/ControllerAvailability";
 import {
@@ -27,6 +27,7 @@ import { getCalendars } from "expo-localization";
 import ControllerLocator from "@/components/form/ControllerLocator";
 import { usePublicProfile } from "@/stores/usePublicProfileStore";
 import useAppContent from "@/hooks/useAppContent";
+import ContainerView from "@/components/ContainerView";
 
 const buildEmptyAvailability = (): Availability =>
   AVAILABILITY_DAY_KEYS.reduce<Availability>((acc, dayKey) => {
@@ -107,7 +108,7 @@ const UpdatePublicProfile = () => {
         },
         {
           merge: true,
-        }
+        },
       );
 
       if (!userData.hasPublicProfile) {
@@ -116,7 +117,7 @@ const UpdatePublicProfile = () => {
           {
             hasPublicProfile: true,
           },
-          { merge: true }
+          { merge: true },
         );
       }
 
@@ -129,7 +130,7 @@ const UpdatePublicProfile = () => {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <FormPage
         canSubmit={isValid && isDirty}
         isSubmitting={isSubmitting}
@@ -250,14 +251,13 @@ const UpdatePublicProfile = () => {
           watch={watch}
         />
       </FormPage>
-    </View>
+    </ContainerView>
   );
 };
 
 export default UpdatePublicProfile;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
   header: { flexDirection: "row", gap: 16, alignItems: "center" },
   nameText: { fontSize: 20, color: "#000" },
   roleText: { fontSize: 14, color: Colors.onlineConsultation },

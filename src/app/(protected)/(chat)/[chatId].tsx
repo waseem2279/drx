@@ -32,6 +32,7 @@ import "dayjs/locale/ar";
 import "dayjs/locale/en";
 import { fetchAppointmentStatus } from "@/api/appointments";
 import LoadingScreen from "@/components/LoadingScreen";
+import { useTheme } from "@/hooks/useTheme";
 
 interface Message {
   _id: number;
@@ -48,6 +49,7 @@ interface User {
 
 const ChatRoom = () => {
   const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const { chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [status, setStatus] = useState<{
@@ -113,7 +115,7 @@ const ChatRoom = () => {
     setLoading(false);
 
     return () => unsubscribeMessages();
-  }, []);
+  }, [chat, messagesRef]);
 
   // Handle whenever the user sends a message
   const onSend = async (newMessages: Message[] = []) => {
@@ -141,7 +143,13 @@ const ChatRoom = () => {
 
   return (
     <View
-      style={{ flex: 1, backgroundColor: "#FFF", paddingBottom: insets.bottom }}
+      style={[
+        {
+          flex: 1,
+          backgroundColor: colors.background,
+          paddingBottom: insets.bottom,
+        },
+      ]}
     >
       <Stack.Screen
         options={{
@@ -209,12 +217,12 @@ const ChatRoom = () => {
               }}
               style={{
                 padding: 8,
-                backgroundColor: Colors.black,
+                backgroundColor: colors.primary,
                 borderRadius: 9999,
                 marginHorizontal: 8,
               }}
             >
-              <CustomIcon name="send" size={16} color="#FFF" />
+              <CustomIcon name="send" size={16} color={colors.background} />
             </TouchableOpacity>
           );
         }}
@@ -345,6 +353,7 @@ export default ChatRoom;
 
 const ChatHeader = ({ chatId }: { chatId: string }) => {
   const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const userData = useUserData();
   const chatData = useChatsById(chatId as string);
@@ -396,7 +405,12 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
 
   // Replace fake values with actual data soon
   return (
-    <View style={[header.container, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        header.container,
+        { backgroundColor: colors.background, paddingTop: insets.top },
+      ]}
+    >
       <View style={header.left}>
         <IconButton
           name={i18n.dir() === "ltr" ? "arrow-back" : "arrow-forward"}
@@ -431,7 +445,7 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
         ]}
         disabled={!isDoctor && !chatData.hasActiveCall}
       >
-        <CustomIcon name="videocam" size={24} color={"#FFF"} />
+        <CustomIcon name="videocam" size={24} color={colors.background} />
       </TouchableOpacity>
     </View>
   );
@@ -439,7 +453,6 @@ const ChatHeader = ({ chatId }: { chatId: string }) => {
 
 const header = StyleSheet.create({
   container: {
-    backgroundColor: "#FFF",
     justifyContent: "space-between",
     flexDirection: "row",
     padding: 16,

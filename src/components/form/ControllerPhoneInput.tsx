@@ -93,7 +93,7 @@ const ControllerPhoneInput = <TFieldValues extends FieldValues>({
       }}
       name={name}
       render={({ field: { onChange, onBlur }, fieldState: { error } }) => (
-        <View style={styles.container}>
+        <View style={styles.phoneInputContainer}>
           <View style={styles.labelContainer}>
             <TextRegular style={styles.label}>
               {t("form.phone-number")}
@@ -157,7 +157,7 @@ function generateMaskFromExample(example: string): (string | RegExp)[] {
 export default ControllerPhoneInput;
 
 const styles = StyleSheet.create({
-  container: {
+  phoneInputContainer: {
     flex: 1,
   },
   labelContainer: {

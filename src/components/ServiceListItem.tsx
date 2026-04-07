@@ -25,7 +25,7 @@ const ServiceListItem = ({
       onPress={() => {
         // Push with id and price
         router.push(
-          `/update-service?serviceId=${id}${price ? `&price=${price}` : ""}`
+          `/update-service?serviceId=${id}${price ? `&price=${price}` : ""}`,
         );
       }}
     >

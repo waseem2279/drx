@@ -4,7 +4,6 @@ import ControllerInput from "@/components/form/ControllerInput";
 import FormPage from "@/components/FormPage";
 import IconButton from "@/components/IconButton";
 import { TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import { useFilePicker } from "@/hooks/useFilePicker";
 import { useImagePicker } from "@/hooks/useImagePicker";
 import { useUserData } from "@/stores/useUserStore";
@@ -15,9 +14,12 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import { auth, db } from "../../../../firebaseConfig";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/hooks/useTheme";
+import ContainerView from "@/components/ContainerView";
 
 const CreateSecondOpinion = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { pickFile } = useFilePicker();
   const { pickImage } = useImagePicker();
   const userData = useUserData();
@@ -74,8 +76,8 @@ const CreateSecondOpinion = () => {
               file.name || file
             }`;
             return await uploadFile(file.uri, storagePath);
-          }
-        )
+          },
+        ),
       );
 
       await addDoc(collection(db, "secondOpinions"), {
@@ -95,7 +97,7 @@ const CreateSecondOpinion = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <FormPage
         canSubmit={isValid && isDirty}
         isSubmitting={isSubmitting}
@@ -117,7 +119,7 @@ const CreateSecondOpinion = () => {
           multiline
           textInputStyle={{ height: 100 }}
         />
-        <View style={styles.actionRow}>
+        <View style={[styles.actionRow, { borderColor: colors.border }]}>
           <TextSemiBold>{t("form.add-attachments")}</TextSemiBold>
           <View style={styles.buttons}>
             <IconButton name="attach-file-add" onPress={handlePickFile} />
@@ -139,30 +141,25 @@ const CreateSecondOpinion = () => {
               />
             ))
           ) : (
-            <Text style={styles.emptyText}>
+            <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>
               {t("form.no-attachments-added")}
             </Text>
           )}
         </View>
       </FormPage>
-    </View>
+    </ContainerView>
   );
 };
 
 export default CreateSecondOpinion;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   actionRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
     paddingBottom: 8,
-    borderBottomColor: Colors.faintGrey,
   },
   buttons: {
     flexDirection: "row",
@@ -171,7 +168,6 @@ const styles = StyleSheet.create({
   attachments: { flexDirection: "row", flexWrap: "wrap", gap: 16 },
   emptyText: {
     textAlign: "center",
-    color: Colors.grey,
     marginTop: 8,
   },
 });

@@ -1,14 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { View, StyleSheet, LayoutChangeEvent, Platform } from "react-native";
+import { StyleSheet, LayoutChangeEvent, Platform } from "react-native";
 import { useFilteredDoctors } from "@/stores/useDoctorSearch";
-import MapView, {
-  Details,
-  PROVIDER_DEFAULT,
-  Region,
-} from "react-native-maps";
+import MapView, { Details, PROVIDER_DEFAULT, Region } from "react-native-maps";
 import LoadingScreen from "./LoadingScreen";
 import DoctorMarker from "./map/DoctorMarker";
 import { useFilters } from "@/stores/useFilterStore";
+import ContainerView from "./ContainerView";
 
 const INITIAL_REGION = {
   latitude: 41.924447,
@@ -34,10 +31,10 @@ const DoctorMap = () => {
     return doctors
       .filter(
         (
-          doctor
+          doctor,
         ): doctor is typeof doctor & {
           coordinates: { longitude: number; latitude: number };
-        } => !!doctor.coordinates
+        } => !!doctor.coordinates,
       )
       .map((doctor) => {
         const { longitude, latitude } = doctor.coordinates;
@@ -63,7 +60,7 @@ const DoctorMap = () => {
   const showCardMarker = region.latitudeDelta <= CARD_MARKER_LATITUDE_DELTA;
 
   return (
-    <View style={styles.container} onLayout={handleLayout}>
+    <ContainerView onLayout={handleLayout}>
       {mapDimensions ? (
         <MapView
           paddingAdjustmentBehavior="never"
@@ -93,7 +90,7 @@ const DoctorMap = () => {
       ) : (
         <LoadingScreen />
       )}
-    </View>
+    </ContainerView>
   );
 };
 

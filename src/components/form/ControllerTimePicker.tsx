@@ -58,7 +58,7 @@ const ControllerTimePicker = <TFieldValues extends FieldValues>({
           : "";
 
         return (
-          <View style={styles.container}>
+          <View style={styles.timePickerContainer}>
             <View style={styles.labelContainer}>
               {label && <TextRegular style={styles.label}>{label}</TextRegular>}
               {error && (
@@ -106,7 +106,7 @@ const ControllerTimePicker = <TFieldValues extends FieldValues>({
 export default ControllerTimePicker;
 
 const styles = StyleSheet.create({
-  container: {
+  timePickerContainer: {
     flex: 1,
   },
   labelContainer: {

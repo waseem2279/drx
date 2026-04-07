@@ -11,9 +11,11 @@ import { uploadFile } from "@/api/files";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
 import { useUserData } from "@/stores/useUserStore";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/hooks/useTheme";
 
 const DoctorVerification = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { pickImage, isUploading } = useImagePicker();
   const userData = useUserData();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,13 +52,13 @@ const DoctorVerification = () => {
 
       Alert.alert(
         t("verification.submitted"),
-        t("verification.verification-successfully-submitted")
+        t("verification.verification-successfully-submitted"),
       );
     } catch (err) {
       console.error("Error submitting verification:", err);
       Alert.alert(
         t("verification.error"),
-        t("verification.something-went-wrong-please-try-again")
+        t("verification.something-went-wrong-please-try-again"),
       );
     } finally {
       setIsSubmitting(false);
@@ -64,7 +66,14 @@ const DoctorVerification = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", padding: 20 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: colors.background,
+        padding: 20,
+      }}
+    >
       {isVerified ? (
         <View style={{ alignItems: "center", marginTop: 40 }}>
           <TextSemiBold
@@ -80,13 +89,13 @@ const DoctorVerification = () => {
           <TextRegular
             style={{
               fontSize: 14,
-              color: "#444",
+              color: colors.mutedForeground,
               textAlign: "center",
               maxWidth: 280,
             }}
           >
             {t(
-              "verification.youve-already-been-approved-and-are-visible-to-patients"
+              "verification.youve-already-been-approved-and-are-visible-to-patients",
             )}
           </TextRegular>
         </View>
@@ -95,7 +104,7 @@ const DoctorVerification = () => {
           <TextSemiBold
             style={{
               fontSize: 18,
-              color: "#333",
+              color: colors.mutedForeground,
               textAlign: "center",
               marginBottom: 10,
             }}
@@ -105,13 +114,13 @@ const DoctorVerification = () => {
           <TextRegular
             style={{
               fontSize: 14,
-              color: "#666",
+              color: colors.mutedForeground,
               textAlign: "center",
               maxWidth: 280,
             }}
           >
             {t(
-              "verification.well-notify-you-once-your-license-has-been-reviewed-and-approved"
+              "verification.well-notify-you-once-your-license-has-been-reviewed-and-approved",
             )}
           </TextRegular>
         </View>
@@ -121,7 +130,7 @@ const DoctorVerification = () => {
             style={{
               fontSize: 18,
               marginBottom: 16,
-              color: "#000",
+              color: colors.foreground,
             }}
           >
             {t("verification.upload-your-medical-license")}
@@ -133,7 +142,7 @@ const DoctorVerification = () => {
             style={{
               width: 220,
               height: 220,
-              backgroundColor: uri ? "transparent" : "#f1f1f1",
+              backgroundColor: uri ? "transparent" : colors.muted,
               borderRadius: 16,
               justifyContent: "center",
               alignItems: "center",
@@ -149,7 +158,7 @@ const DoctorVerification = () => {
             ) : isUploading ? (
               <ActivityIndicator />
             ) : (
-              <TextRegular style={{ color: "#888" }}>
+              <TextRegular style={{ color: colors.mutedForeground }}>
                 {t("verification.tap-to-upload")}
               </TextRegular>
             )}
@@ -159,18 +168,21 @@ const DoctorVerification = () => {
             onPress={handleSubmit}
             disabled={!uri || isSubmitting || isUploading}
             style={{
+              width: "100%",
               backgroundColor:
-                !uri || isSubmitting || isUploading ? "#ccc" : Colors.green,
+                !uri || isSubmitting || isUploading
+                  ? colors.mutedForeground
+                  : Colors.green,
               paddingVertical: 12,
               borderRadius: 10,
             }}
           >
             {isSubmitting ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.background} />
             ) : (
               <TextSemiBold
                 style={{
-                  color: "#fff",
+                  color: colors.background,
                   fontSize: 16,
                   textAlign: "center",
                 }}

@@ -1,6 +1,6 @@
 import { TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import { getPatientSymptoms } from "@/constants/options";
+import { useTheme } from "@/hooks/useTheme";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -22,6 +22,7 @@ type TabItem = {
 
 const Symptoms = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const patientSymptoms = useMemo(() => getPatientSymptoms(t), [t]);
   const onPress = (item: TabItem) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -35,7 +36,9 @@ const Symptoms = () => {
     });
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.symptomsContainer, { borderBottomColor: colors.border }]}
+    >
       <TextSemiBold style={styles.header}>
         {t("home.what-can-we-help-with")}
       </TextSemiBold>
@@ -67,7 +70,7 @@ const Symptoms = () => {
 export default Symptoms;
 
 const styles = StyleSheet.create({
-  container: {
+  symptomsContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -75,7 +78,6 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.faintGrey,
   },
   header: {
     fontSize: 16,

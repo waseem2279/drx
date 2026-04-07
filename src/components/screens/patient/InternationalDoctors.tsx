@@ -1,7 +1,7 @@
 import CustomIcon from "@/components/CustomIcon";
 import { TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import { getDoctorCountries } from "@/constants/options";
+import { useTheme } from "@/hooks/useTheme";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -24,6 +24,7 @@ type Item = {
 
 const InternationalDoctors = () => {
   const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const countries = useMemo(() => getDoctorCountries(t), [t]);
   const onPress = (filter: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -37,7 +38,12 @@ const InternationalDoctors = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.internationalDoctorsContainer,
+        { borderBottomColor: colors.border },
+      ]}
+    >
       <TextSemiBold style={styles.header}>
         {t("home.go-international")}
       </TextSemiBold>
@@ -53,10 +59,7 @@ const InternationalDoctors = () => {
             style={styles.item}
           >
             <View
-              style={[
-                styles.countryImage,
-                { backgroundColor: item.backgroundColor },
-              ]}
+              style={[styles.countryImage, { backgroundColor: colors.primary }]}
             >
               <Image
                 style={styles.image}
@@ -70,7 +73,7 @@ const InternationalDoctors = () => {
               <CustomIcon
                 name={i18n.dir() === "ltr" ? "arrow-forward" : "arrow-back"}
                 size={20}
-                color="#000"
+                color={colors.foreground}
               />
             </View>
           </TouchableOpacity>
@@ -83,14 +86,13 @@ const InternationalDoctors = () => {
 export default InternationalDoctors;
 
 const styles = StyleSheet.create({
-  container: {
+  internationalDoctorsContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 8,
     paddingBottom: 12,
-    borderBottomColor: Colors.faintGrey,
     borderBottomWidth: 1,
   },
   header: {
@@ -129,6 +131,5 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    color: "#000",
   },
 });

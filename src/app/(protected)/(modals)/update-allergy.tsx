@@ -10,9 +10,10 @@ import {
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
+import ContainerView from "@/components/ContainerView";
 
 type AllergyForm = {
   name: string;
@@ -54,7 +55,7 @@ const UpdateAllergy = () => {
   }));
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <Stack.Screen
         options={{
           title: t(isEditMode ? "page.edit-allergy" : "page.add-allergy"),
@@ -87,17 +88,13 @@ const UpdateAllergy = () => {
       />
 
       <Animated.View style={fakeView} />
-    </View>
+    </ContainerView>
   );
 };
 
 export default UpdateAllergy;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   pageScrollViewContent: {
     flexDirection: "column",
     gap: 16,

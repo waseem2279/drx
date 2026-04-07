@@ -1,3 +1,4 @@
+import ContainerView from "@/components/ContainerView";
 import CustomIcon from "@/components/CustomIcon";
 import { TextRegular } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
@@ -29,7 +30,7 @@ export default function SearchModal() {
     setSearchQuery(text);
     if (text.length > 0) {
       const results = chats.filter((chat) =>
-        JSON.stringify(chat).toLowerCase().includes(text.toLowerCase())
+        JSON.stringify(chat).toLowerCase().includes(text.toLowerCase()),
       );
       setSearchResults(results);
     } else {
@@ -46,7 +47,7 @@ export default function SearchModal() {
   };
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <View style={styles.searchContainer}>
         <CustomIcon name="search" size={20} color="#9b9a9e" />
         <TextInput
@@ -98,15 +99,11 @@ export default function SearchModal() {
           </View>
         )}
       />
-    </View>
+    </ContainerView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",

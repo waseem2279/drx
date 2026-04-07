@@ -1,21 +1,13 @@
 import React from "react";
 import CountryCodes from "@/components/CountryCodes";
-import { View, StyleSheet } from "react-native";
+import ContainerView from "@/components/ContainerView";
 
 const CountryPicker = () => {
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <CountryCodes />
-    </View>
+    </ContainerView>
   );
 };
 
 export default CountryPicker;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "#FFF",
-  },
-});

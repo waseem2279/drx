@@ -8,6 +8,7 @@ import IconButton from "./IconButton";
 import { TextRegular, TextSemiBold } from "./StyledText";
 import { useTranslation } from "react-i18next";
 import { getTabs } from "@/constants/options";
+import { useTheme } from "@/hooks/useTheme";
 
 interface Props {
   setFilter: (filter: string) => void;
@@ -15,6 +16,7 @@ interface Props {
 
 const MessagesHeader = ({ setFilter }: Props) => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const tabs = useMemo(() => getTabs(t), [t]);
   const scrollRef = useRef<ScrollView | null>(null);
   const itemsRef = useRef<(typeof TouchableOpacity | null)[]>([]);
@@ -29,8 +31,10 @@ const MessagesHeader = ({ setFilter }: Props) => {
   };
 
   return (
-    <View style={{ backgroundColor: "#FFF", paddingTop: insets.top }}>
-      <View style={styles.container}>
+    <View
+      style={{ backgroundColor: colors.background, paddingTop: insets.top }}
+    >
+      <View style={styles.headerContent}>
         <View style={styles.actionRow}>
           {/* Messages title */}
           <TextSemiBold style={{ fontSize: 32 }}>
@@ -67,10 +71,10 @@ const MessagesHeader = ({ setFilter }: Props) => {
                 {
                   boxSizing: "border-box",
                   borderColor:
-                    activeIndex === index ? "none" : Colors.light.faintGrey,
+                    activeIndex === index ? colors.primary : colors.border,
                   borderWidth: 1,
                   backgroundColor:
-                    activeIndex === index ? "#000" : "transparent",
+                    activeIndex === index ? colors.primary : "transparent",
                 },
                 styles.filterPill,
               ]}
@@ -79,7 +83,7 @@ const MessagesHeader = ({ setFilter }: Props) => {
                 style={
                   activeIndex === index
                     ? {
-                        color: "#fff",
+                        color: colors.background,
                         textTransform: "capitalize",
                       }
                     : { textTransform: "capitalize", color: Colors.grey }
@@ -96,7 +100,7 @@ const MessagesHeader = ({ setFilter }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  headerContent: {
     flexDirection: "column",
     justifyContent: "flex-start",
   },

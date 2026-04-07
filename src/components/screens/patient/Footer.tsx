@@ -1,5 +1,5 @@
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import React from "react";
@@ -8,10 +8,13 @@ import { StyleSheet, View } from "react-native";
 
 const Footer = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <TextRegular style={styles.footerText}>
+    <View style={[styles.footerContainer, { borderTopColor: colors.border }]}>
+      <TextRegular
+        style={[styles.footerText, { color: colors.mutedForeground }]}
+      >
         {t("home.footer.commitment-message")}
         <Link href="/terms-of-service">
           <TextRegular style={styles.textLink}>
@@ -27,14 +30,16 @@ const Footer = () => {
         </Link>
         {t("common.period")}
       </TextRegular>
-      <View style={styles.trademark}>
+      <View style={[styles.trademark, { backgroundColor: colors.foreground }]}>
         <Image
           style={styles.logo}
           source={require("@/../assets/images/icon.png")}
           contentFit="contain"
           transition={250}
         />
-        <TextSemiBold style={styles.logoDescription}>
+        <TextSemiBold
+          style={[styles.logoDescription, { color: colors.background }]}
+        >
           {t("home.by-drx-genius-llc")}
         </TextSemiBold>
       </View>
@@ -45,16 +50,14 @@ const Footer = () => {
 export default Footer;
 
 const styles = StyleSheet.create({
-  container: {
+  footerContainer: {
     flex: 1,
     alignItems: "center", // Center everything horizontally
     justifyContent: "center", // Center vertically if needed
     borderTopWidth: 1,
-    borderTopColor: Colors.faintGrey,
   },
   footerText: {
     fontSize: 16,
-    color: Colors.grey,
     marginVertical: 16,
     marginHorizontal: 16,
     textAlign: "center", // Center the text
@@ -63,7 +66,6 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   trademark: {
-    backgroundColor: Colors.black,
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
@@ -77,7 +79,6 @@ const styles = StyleSheet.create({
     height: 64,
   },
   logoDescription: {
-    color: "#FFF",
     fontSize: 16,
   },
 });

@@ -4,7 +4,6 @@ import BillingDetailsSelector from "@/components/BillingDetails/BillingDetailsSe
 import PageScrollView from "@/components/PageScrollView";
 import RegularTextInput from "@/components/RegularTextInput";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import useGradualAnimation from "@/hooks/useGradualAnimation";
 import { useUserData } from "@/stores/useUserStore";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
@@ -14,8 +13,11 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { db } from "../../../../firebaseConfig";
+import { useTheme } from "@/hooks/useTheme";
+import ContainerView from "@/components/ContainerView";
 
 const AddCard = () => {
+  const { colors } = useTheme();
   const { height } = useGradualAnimation();
   const { confirmSetupIntent } = useStripe();
 
@@ -30,7 +32,7 @@ const AddCard = () => {
     () => ({
       height: Math.abs(height.value),
     }),
-    []
+    [],
   );
 
   const handleSelectBillingAddress = (selected: any) => {
@@ -52,7 +54,7 @@ const AddCard = () => {
 
     try {
       const customerDoc = await getDoc(
-        doc(db, "stripe_customers", userData.uid)
+        doc(db, "stripe_customers", userData.uid),
       );
       const { setup_secret } = customerDoc.data() || {};
 
@@ -79,7 +81,7 @@ const AddCard = () => {
         collection(db, "stripe_customers", userData.uid, "payment_methods"),
         {
           id: setupIntent.paymentMethodId,
-        }
+        },
       );
 
       // Save billing address
@@ -99,9 +101,9 @@ const AddCard = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <PageScrollView>
-        <TextSemiBold style={styles.title}>
+        <TextSemiBold style={[styles.title, { color: colors.foreground }]}>
           Enter the card you want to use for booking appointments
         </TextSemiBold>
 
@@ -112,12 +114,21 @@ const AddCard = () => {
           placeholder="e.g. John Doe"
         />
 
-        <TextRegular style={styles.cardFieldLabel}>Card details</TextRegular>
-        <View style={styles.cardFieldContainer}>
+        <TextRegular
+          style={[styles.cardFieldLabel, { color: colors.foreground }]}
+        >
+          Card details
+        </TextRegular>
+        <View
+          style={[styles.cardFieldContainer, { borderColor: colors.border }]}
+        >
           <CardField
             postalCodeEnabled={true}
             placeholders={{ number: "4242 4242 4242 4242" }}
-            cardStyle={{ backgroundColor: "#FFFFFF", textColor: "#000000" }}
+            cardStyle={{
+              backgroundColor: colors.background,
+              textColor: colors.foreground,
+            }}
             style={{ width: "100%", height: 14, marginVertical: 20 }}
             onCardChange={(cardDetails) => {
               setCardComplete(cardDetails.complete);
@@ -141,30 +152,23 @@ const AddCard = () => {
       />
 
       <Animated.View style={fakeView} />
-    </View>
+    </ContainerView>
   );
 };
 
 export default AddCard;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   title: {
     marginBottom: 16,
     fontSize: 16,
-    color: "#000",
   },
   cardFieldLabel: {
     marginBottom: 8,
     fontSize: 16,
-    color: "#000",
   },
   cardFieldContainer: {
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.faintGrey,
   },
 });

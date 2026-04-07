@@ -13,15 +13,17 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { locales } from "@/constants/locales";
 import i18next from "i18next";
+import { useTheme } from "@/hooks/useTheme";
 
 const DayInfo = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { date } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const appointmentsByDate = useAppointmentsByDate(date as string);
 
   return (
-    <View style={page.container}>
+    <View style={[page.container, { backgroundColor: colors.background }]}>
       <Stack.Screen
         options={{
           header: () => <DayInfoHeader date={date as string} />,
@@ -78,7 +80,7 @@ const DayInfo = () => {
                 params: {
                   chatId: getChatId(
                     appointment.patientId,
-                    appointment.doctorId
+                    appointment.doctorId,
                   ),
                 },
               })
@@ -137,6 +139,7 @@ export default DayInfo;
 
 const DayInfoHeader = ({ date }: { date: string }) => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const appointmentsByDate = useAppointmentsByDate(date as string);
   const insets = useSafeAreaInsets();
 
@@ -146,6 +149,10 @@ const DayInfoHeader = ({ date }: { date: string }) => {
     <View
       style={[
         header.container,
+        {
+          backgroundColor: colors.background,
+          borderBottomColor: colors.border,
+        },
         Platform.OS === "android" && { paddingTop: insets.top },
       ]}
     >
@@ -176,19 +183,16 @@ const DayInfoHeader = ({ date }: { date: string }) => {
 const page = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
     paddingHorizontal: 16,
   },
 });
 
 const header = StyleSheet.create({
   container: {
-    backgroundColor: "#FFF",
     padding: 16,
     flexDirection: "column",
     gap: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lightGrey2,
   },
   date: {
     fontSize: 24,

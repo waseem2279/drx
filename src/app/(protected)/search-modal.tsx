@@ -1,3 +1,4 @@
+import ContainerView from "@/components/ContainerView";
 import CustomIcon from "@/components/CustomIcon";
 import { TextRegular } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
@@ -44,7 +45,7 @@ export default function SearchModal() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <ContainerView>
       <View style={styles.searchContainer}>
         <CustomIcon name="search" size={20} color={colors.mutedForeground} />
         <TextInput
@@ -93,14 +94,11 @@ export default function SearchModal() {
           </View>
         )}
       />
-    </View>
+    </ContainerView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",

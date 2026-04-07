@@ -1,4 +1,5 @@
 import { saveItem } from "@/api/medicalRecords";
+import ContainerView from "@/components/ContainerView";
 import Divider from "@/components/Divider";
 import ControllerCheckBoxOptions from "@/components/form/ControllerCheckBoxOptions";
 import ControllerInput from "@/components/form/ControllerInput";
@@ -11,7 +12,6 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
 
 type MedicationForm = {
   name: string;
@@ -59,7 +59,7 @@ const UpdateMedication = () => {
         medicalRecord!,
         data,
         medication,
-        "medications"
+        "medications",
       );
 
       router.dismiss();
@@ -69,11 +69,11 @@ const UpdateMedication = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ContainerView>
       <Stack.Screen
         options={{
           title: `${isEditMode ? t("common.edit") : t("common.add")} ${t(
-            "common.medication"
+            "common.medication",
           )}`,
         }}
       />
@@ -142,15 +142,8 @@ const UpdateMedication = () => {
           singleSelect
         />
       </FormPage>
-    </View>
+    </ContainerView>
   );
 };
 
 export default UpdateMedication;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
