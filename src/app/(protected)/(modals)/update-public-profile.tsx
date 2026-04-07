@@ -259,7 +259,7 @@ export default UpdatePublicProfile;
 
 const styles = StyleSheet.create({
   header: { flexDirection: "row", gap: 16, alignItems: "center" },
-  nameText: { fontSize: 20, color: "#000" },
+  nameText: { fontSize: 20 },
   roleText: { fontSize: 14, color: Colors.onlineConsultation },
   actionRow: {
     flexDirection: "row",

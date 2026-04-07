@@ -111,11 +111,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: "#000",
     textAlign: "left",
   },
   buttonText: {
     fontSize: 12,
-    color: "#000",
   },
 });

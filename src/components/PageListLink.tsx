@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: "#000",
   },
   description: {
     fontSize: 14,

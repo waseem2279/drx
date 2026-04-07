@@ -89,7 +89,6 @@ const DoctorCalendar = () => {
         <TextSemiBold
           style={{
             fontSize: 16,
-            color: "#000",
             textAlign: "center",
           }}
         >

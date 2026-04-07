@@ -176,7 +176,7 @@ const BookingPage = () => {
           }}
         >
           <View style={{ flex: 1 }}>
-            <TextSemiBold style={{ fontSize: 20, color: "#000" }}>
+            <TextSemiBold style={{ fontSize: 20 }}>
               {t("doctor.name", { lastName: doctor?.lastName })}
             </TextSemiBold>
             <Pills items={specializations} />

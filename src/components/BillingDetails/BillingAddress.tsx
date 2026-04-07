@@ -70,6 +70,5 @@ const BillingAddressStyles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: "#000",
   },
 });

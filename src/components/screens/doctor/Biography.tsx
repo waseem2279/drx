@@ -20,7 +20,6 @@ const Biography = ({ doctor }: { doctor: any }) => {
       <TextRegular
         style={{
           fontSize: 16,
-          color: "#000",
           lineHeight: 20,
         }}
         numberOfLines={showFullBio ? undefined : 5}
@@ -46,7 +45,6 @@ const Biography = ({ doctor }: { doctor: any }) => {
           <TextSemiBold
             style={{
               fontSize: 14,
-              color: "#000",
             }}
           >
             Show more

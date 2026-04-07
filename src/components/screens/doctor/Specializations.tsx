@@ -15,7 +15,7 @@ const Specializations = ({ doctor }: { doctor: any }) => {
 
   return (
     <View style={{ flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-      <TextSemiBold style={{ fontSize: 16, color: "#000", textAlign: "left" }}>
+      <TextSemiBold style={{ fontSize: 16, textAlign: "left" }}>
         {t("common.specializations")}
       </TextSemiBold>
       <View

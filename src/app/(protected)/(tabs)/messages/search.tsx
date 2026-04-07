@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   resultTitle: {
-    color: "#000",
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 4,
