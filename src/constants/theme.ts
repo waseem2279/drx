@@ -12,7 +12,7 @@ export const themes = {
     popoverForeground: "#000000",
 
     // Brand / Primary
-    primary: "#0456A2",
+    primary: "#526bae",
     primaryForeground: "#FFFFFF",
 
     // Secondary UI
@@ -62,7 +62,7 @@ export const themes = {
     popoverForeground: "#FFFFFF",
 
     // Brand / Primary
-    primary: "#0456A2",
+    primary: "#526bae",
     primaryForeground: "#FFFFFF",
 
     // Secondary UI

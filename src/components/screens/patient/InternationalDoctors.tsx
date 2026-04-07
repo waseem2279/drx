@@ -58,11 +58,9 @@ const InternationalDoctors = () => {
             key={index}
             style={styles.item}
           >
-            <View
-              style={[styles.countryImage, { backgroundColor: colors.primary }]}
-            >
+            <View style={[styles.countryImage, { borderColor: colors.border }]}>
               <Image
-                style={styles.image}
+                style={[styles.image, { tintColor: colors.primary }]}
                 source={item.image}
                 contentFit="contain"
                 transition={1000}
@@ -118,6 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
+    borderWidth: 1,
   },
   image: {
     width: "100%",

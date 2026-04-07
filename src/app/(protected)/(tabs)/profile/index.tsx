@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from "react-native";
 import PageScrollView from "@/components/PageScrollView";
 import { TextRegular, TextSemiBold } from "@/components/StyledText";
 import UserAvatar from "@/components/UserAvatar";
-import Colors from "@/constants/Colors";
 import { useSession } from "@/contexts/AuthContext";
 import { useUserData } from "@/stores/useUserStore";
 import { Link, RelativePathString } from "expo-router";
@@ -19,6 +18,7 @@ import {
   useStartPublicProfileListener,
 } from "@/stores/usePublicProfileStore";
 import LoadingScreen from "@/components/LoadingScreen";
+import { useTheme } from "@/hooks/useTheme";
 
 const TOTAL_PADDING = 32;
 const GAP = 8;
@@ -33,6 +33,8 @@ const Profile = () => {
   const [componentWidth, setComponentWidth] = useState(0);
   const isPatient = userData?.role === "patient";
 
+  const { colors } = useTheme();
+
   const onLayout = (event: {
     nativeEvent: { layout: { width: number; height: number } };
   }) => {
@@ -44,13 +46,13 @@ const Profile = () => {
     if (userData?.role === "doctor") {
       startPublicProfileListener();
     }
-  }, []);
+  }, [startPublicProfileListener, userData?.role]);
 
   if (isFetchingPublicProfile) return <LoadingScreen />;
 
   const cardWidth = (componentWidth - TOTAL_PADDING) / 2 - GAP / 2;
 
-  const color = "#000";
+  const iconColor = colors.primary;
   const links = isPatient ? getPatientLinks(t) : getDoctorLinks(t);
 
   return (
@@ -67,9 +69,8 @@ const Profile = () => {
       <View
         style={{
           width: "100%",
-          backgroundColor: "#FFF",
+          backgroundColor: colors.card,
           marginVertical: 16,
-
           paddingVertical: 32,
           flexDirection: "row",
           gap: 16,
@@ -77,25 +78,23 @@ const Profile = () => {
           justifyContent: "center",
           borderRadius: 16,
 
-          shadowColor: "#000", // ios
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
+          // Shadows (keep static)
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.5,
           shadowRadius: 3.84,
-          elevation: 10, // android
+          elevation: 10,
         }}
       >
         <UserAvatar size={64} canUpload={true} />
         <View>
-          <TextSemiBold style={{ fontSize: 20 }}>
+          <TextSemiBold style={{ fontSize: 20, color: colors.foreground }}>
             {userData?.firstName + " " + userData?.lastName}
           </TextSemiBold>
           <TextRegular
             style={{
               fontSize: 16,
-              color: isPatient ? Colors.primary : Colors.gold,
+              color: isPatient ? colors.primary : colors.warning,
               textAlign: "left",
             }}
           >
@@ -105,7 +104,13 @@ const Profile = () => {
       </View>
 
       {/* Main Message */}
-      <TextSemiBold style={{ fontSize: 20, marginBottom: 16 }}>
+      <TextSemiBold
+        style={{
+          fontSize: 20,
+          marginBottom: 16,
+          color: colors.foreground,
+        }}
+      >
         {t("profile.how-can-we-help-you-userdata-firstname", {
           firstName: userData?.firstName,
         })}
@@ -121,7 +126,6 @@ const Profile = () => {
         }}
       >
         {links.map((item, idx) => (
-          // The links themselves
           <Link key={idx} href={item.url as RelativePathString} asChild>
             <TouchableOpacity
               style={{
@@ -135,18 +139,19 @@ const Profile = () => {
                 gap: 16,
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: Colors.light.faintGrey,
+                borderColor: colors.border,
+                backgroundColor: colors.card,
               }}
             >
               <CustomIcon
                 name={item.icon as IconName}
                 size={24}
-                color={color}
+                color={iconColor}
               />
               <TextRegular
                 style={{
                   fontSize: 12,
-                  color: Colors.light.grey,
+                  color: colors.accentForeground,
                   textAlign: "left",
                 }}
               >

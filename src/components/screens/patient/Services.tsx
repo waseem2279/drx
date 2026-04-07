@@ -1,5 +1,6 @@
 import { TextSemiBold } from "@/components/StyledText";
 import { getOurServices, ServiceItem } from "@/constants/options";
+import { useTheme } from "@/hooks/useTheme";
 import { useClearAndSetFilters } from "@/stores/useFilterStore";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
@@ -10,6 +11,7 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Services = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const clearAndSetFilters = useClearAndSetFilters();
   const services = useMemo(() => getOurServices(t), [t]);
 
@@ -34,12 +36,13 @@ const Services = () => {
         {services.map((item: ServiceItem, index: number) => (
           <View key={index} style={styles.item}>
             <View
-              style={[
-                styles.description,
-                { backgroundColor: item.backgroundColor },
-              ]}
+              style={[styles.description, { backgroundColor: colors.primary }]}
             >
-              <TextSemiBold style={styles.text}>{item.name}</TextSemiBold>
+              <TextSemiBold
+                style={[styles.text, { color: colors.primaryForeground }]}
+              >
+                {item.name}
+              </TextSemiBold>
               <TouchableOpacity
                 onPress={() => onPress(item)}
                 style={styles.button}

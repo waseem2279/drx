@@ -46,7 +46,7 @@ const PatientActions = () => {
           <CustomIcon
             name={item.icon as IconName}
             size={24}
-            color={colors.foreground}
+            color={colors.primary}
           />
           <View style={styles.actionRight}>
             <TextSemiBold style={styles.actionName}>{item.name}</TextSemiBold>

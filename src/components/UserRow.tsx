@@ -1,4 +1,3 @@
-import Colors from "@/constants/Colors";
 import { useUserData } from "@/stores/useUserStore";
 import { router } from "expo-router";
 import React from "react";
@@ -8,9 +7,11 @@ import { TextRegular, TextSemiBold } from "./StyledText";
 import UserAvatar from "./UserAvatar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/hooks/useTheme";
 
 const UserRow = () => {
   const userData = useUserData();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   if (!userData) {
@@ -26,7 +27,7 @@ const UserRow = () => {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: "#FFF",
+        backgroundColor: colors.background,
       }}
     >
       <WelcomeMessage
@@ -39,6 +40,7 @@ const UserRow = () => {
           onPress={() => {
             router.navigate("/(protected)/notifications");
           }}
+          iconColor={colors.primary}
         />
         <UserAvatar
           size={40}
@@ -52,11 +54,13 @@ const UserRow = () => {
 
 const WelcomeMessage = ({ name, role }: { name: string; role: string }) => {
   const { t } = useTranslation();
-  const color = role === "patient" ? Colors.primary : Colors.gold;
+  const { colors } = useTheme();
 
   return (
     <View style={styles.welcomeContainer}>
-      <TextRegular style={styles.welcomeText}>
+      <TextRegular
+        style={[styles.welcomeText, { color: colors.mutedForeground }]}
+      >
         {t("header.welcome-back")}
       </TextRegular>
       <View style={styles.textContainer}>
@@ -65,7 +69,7 @@ const WelcomeMessage = ({ name, role }: { name: string; role: string }) => {
           style={[
             styles.roleText,
             {
-              color,
+              color: colors.primary,
             },
           ]}
         >
@@ -81,13 +85,11 @@ export default UserRow;
 const styles = StyleSheet.create({
   welcomeContainer: { justifyContent: "center", alignItems: "flex-start" },
   welcomeText: {
-    color: Colors.grey,
     fontSize: 14,
   },
   textContainer: { flexDirection: "row", alignItems: "center", gap: 8 },
   nameText: {
     fontSize: 20,
-    color: Colors.black,
   },
   roleText: {
     fontSize: 12,

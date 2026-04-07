@@ -17,14 +17,14 @@ const Footer = () => {
       >
         {t("home.footer.commitment-message")}
         <Link href="/terms-of-service">
-          <TextRegular style={styles.textLink}>
+          <TextRegular style={[styles.textLink, { color: colors.primary }]}>
             {t("common.terms-of-service")}
           </TextRegular>
         </Link>{" "}
         {t("common.and")}
         <Link href="/privacy-policy">
           {" "}
-          <TextRegular style={styles.textLink}>
+          <TextRegular style={[styles.textLink, { color: colors.primary }]}>
             {t("common.privacy-policy")}
           </TextRegular>
         </Link>

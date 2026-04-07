@@ -1,4 +1,3 @@
-import Colors from "@/constants/Colors";
 import React from "react";
 import {
   GestureResponderEvent,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import CustomIcon from "./CustomIcon";
 import { IconName } from "../constants/iconsMap";
+import { useTheme } from "@/hooks/useTheme";
 
 const DEFAULT_ICONBUTTON_SIZE = 40;
 
@@ -19,6 +19,7 @@ const IconButton = ({
   containerStyle,
   buttonStyle,
   size = DEFAULT_ICONBUTTON_SIZE,
+  iconColor = "#000",
 }: {
   name: IconName;
   onPress?: (event: GestureResponderEvent) => void;
@@ -26,7 +27,10 @@ const IconButton = ({
   containerStyle?: StyleProp<ViewStyle>;
   buttonStyle?: StyleProp<ViewStyle>;
   size?: number;
+  iconColor?: string;
 }) => {
+  const { colors } = useTheme();
+
   return (
     <View style={containerStyle} pointerEvents={pointerEvents}>
       <TouchableOpacity
@@ -38,13 +42,13 @@ const IconButton = ({
             justifyContent: "center",
             borderRadius: 9999,
             borderWidth: 1,
-            borderColor: Colors.lightGrey2,
+            borderColor: colors.border,
           },
           buttonStyle,
         ]}
         onPress={onPress}
       >
-        <CustomIcon name={name} size={size * 0.6} color="#000" />
+        <CustomIcon name={name} size={size * 0.6} color={iconColor} />
       </TouchableOpacity>
     </View>
   );
