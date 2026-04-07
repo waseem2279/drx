@@ -1,22 +1,23 @@
 import ChatsList from "@/components/ChatsList";
 import MessagesHeader from "@/components/MessagesHeader";
-import Colors from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { View } from "react-native";
 
 import { useState } from "react";
+import { useTheme } from "@/hooks/useTheme";
 
 const Messages = () => {
   const [filter, setFilter] = useState<string>("all");
+  const { colors } = useTheme();
 
   return (
     <View
       style={{
-        backgroundColor: "#FFF",
+        backgroundColor: colors.background,
         flex: 1,
         borderWidth: 0,
         borderTopWidth: 1,
-        borderColor: Colors.light.faintGrey,
+        borderColor: colors.border,
       }}
     >
       <Stack.Screen

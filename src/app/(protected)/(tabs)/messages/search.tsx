@@ -1,7 +1,7 @@
 import ContainerView from "@/components/ContainerView";
 import CustomIcon from "@/components/CustomIcon";
 import { TextRegular } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { useChats } from "@/stores/useChatStore";
 import { useUserData } from "@/stores/useUserStore";
 import { Chat } from "@/types/chat";
@@ -20,6 +20,7 @@ import {
 
 export default function SearchModal() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const userData = useUserData();
@@ -48,19 +49,23 @@ export default function SearchModal() {
 
   return (
     <ContainerView>
-      <View style={styles.searchContainer}>
-        <CustomIcon name="search" size={20} color="#9b9a9e" />
+      <View style={[styles.searchContainer, { borderColor: colors.border }]}>
+        <CustomIcon name="search" size={20} color={colors.mutedForeground} />
         <TextInput
           style={styles.searchInput}
           placeholder={t("form.search-chats")}
-          placeholderTextColor={Colors.lightText}
+          placeholderTextColor={colors.mutedForeground}
           value={searchQuery}
           onChangeText={handleSearch}
           autoFocus
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => handleSearch("")}>
-            <Ionicons name="close-circle" size={20} color="#9b9a9e" />
+            <Ionicons
+              name="close-circle"
+              size={20}
+              color={colors.mutedForeground}
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -78,7 +83,9 @@ export default function SearchModal() {
                 ? `${item.participants.doctor.firstName} ${item.participants.doctor.lastName}`
                 : `${item.participants.patient.firstName} ${item.participants.patient.lastName}`}
             </TextRegular>
-            <TextRegular style={styles.resultDate}>
+            <TextRegular
+              style={[styles.resultDate, { color: colors.mutedForeground }]}
+            >
               {item.createdAt.toDate().toLocaleString(i18next.language, {
                 month: "short",
                 day: "numeric",
@@ -91,7 +98,9 @@ export default function SearchModal() {
         )}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            <TextRegular style={styles.emptyText}>
+            <TextRegular
+              style={[styles.emptyText, { color: colors.mutedForeground }]}
+            >
               {searchQuery.length > 0
                 ? t("form.no-chats-found")
                 : t("form.start-typing-to-search-chats")}
@@ -111,7 +120,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.faintGrey,
     gap: 10,
   },
   searchInput: {
@@ -130,7 +138,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   resultDate: {
-    color: "#9b9a9e",
     fontSize: 14,
   },
   emptyContainer: {
@@ -139,7 +146,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   emptyText: {
-    color: "#9b9a9e",
     fontSize: 16,
   },
 });

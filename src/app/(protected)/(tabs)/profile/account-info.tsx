@@ -2,7 +2,6 @@ import Divider from "@/components/Divider";
 import ControllerCheckBoxOptions from "@/components/form/ControllerCheckBoxOptions";
 import ControllerDatePicker from "@/components/form/ControllerDatePicker";
 import ControllerInput from "@/components/form/ControllerInput";
-import Colors from "@/constants/Colors";
 import { useUserData } from "@/stores/useUserStore";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import React from "react";
@@ -13,9 +12,11 @@ import { db } from "../../../../../firebaseConfig";
 import { useTranslation } from "react-i18next";
 import SubmitButton from "@/components/SubmitButton";
 import AddPhone from "@/components/form/AddPhone";
+import { useTheme } from "@/hooks/useTheme";
 
 const AccountInfo = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const userData = useUserData();
 
   const { control, handleSubmit, formState, reset } = useForm<any>({
@@ -61,7 +62,7 @@ const AccountInfo = () => {
   return (
     <KeyboardAwareScrollView
       bottomOffset={62}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
     >
       <ControllerInput
@@ -126,23 +127,11 @@ export default AccountInfo;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   content: {
-    backgroundColor: "#fff",
     flexDirection: "column",
     gap: 16,
     paddingHorizontal: 16,
     position: "relative",
-  },
-  saveButton: {
-    backgroundColor: Colors.black,
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontSize: 16,
   },
 });

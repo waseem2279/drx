@@ -1,5 +1,6 @@
 import { TextSemiBold } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import { Control, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,7 @@ const ControllerRoleSelector = ({
   disabled?: boolean;
 }) => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   return (
     <Controller
@@ -45,12 +47,18 @@ const ControllerRoleSelector = ({
                     style={[
                       styles.option,
                       {
-                        backgroundColor: isSelected ? "#8854D0" : "transparent",
+                        backgroundColor: isSelected
+                          ? colors.primary
+                          : "transparent",
                       },
                     ]}
                   >
                     <TextSemiBold
-                      style={{ color: isSelected ? "#fff" : "#000" }}
+                      style={{
+                        color: isSelected
+                          ? colors.background
+                          : colors.foreground,
+                      }}
                     >
                       {option}
                     </TextSemiBold>

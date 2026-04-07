@@ -6,11 +6,7 @@ const MessagesLayout = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack
-      screenOptions={{
-        navigationBarColor: "#FFF",
-      }}
-    >
+    <Stack>
       <Stack.Screen name="index" />
       <Stack.Screen
         name="search"
