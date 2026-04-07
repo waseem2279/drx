@@ -32,7 +32,7 @@ const Call = () => {
   const insets = useSafeAreaInsets();
 
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const {
     localStream,

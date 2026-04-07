@@ -26,6 +26,7 @@ import { auth } from "../../firebaseConfig";
 import { SessionProvider } from "../contexts/AuthContext";
 import "../i18n/config";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/hooks/useTheme";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -123,6 +124,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -132,7 +134,7 @@ function RootLayoutNav() {
             <SessionProvider>
               <Stack
                 screenOptions={{
-                  navigationBarColor: "#FFF",
+                  navigationBarColor: colors.background,
                 }}
               >
                 <Stack.Screen

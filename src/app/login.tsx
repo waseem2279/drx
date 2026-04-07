@@ -56,7 +56,9 @@ const SignIn = () => {
       ]}
       contentContainerStyle={styles.keyboardAwareScrollView}
     >
-      <TextSemiBold style={styles.headerText}>{t("login.header")}</TextSemiBold>
+      <TextSemiBold style={[styles.headerText, { color: colors.foreground }]}>
+        {t("login.header")}
+      </TextSemiBold>
 
       {/* Email */}
       <ControllerInput
@@ -148,7 +150,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: "600",
-    color: "#000",
     textAlign: "center",
     marginBottom: 24,
   },

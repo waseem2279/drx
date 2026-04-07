@@ -1,6 +1,7 @@
 import CustomIcon from "@/components/CustomIcon";
 import { TextRegular } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { useDoctors } from "@/stores/useDoctorSearch";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -16,6 +17,7 @@ import {
 
 export default function SearchModal() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const doctors = useDoctors();
@@ -25,7 +27,7 @@ export default function SearchModal() {
     setSearchQuery(text);
     if (text.length > 0) {
       const results = doctors.filter((doctor) =>
-        JSON.stringify(doctor).toLowerCase().includes(text.toLowerCase())
+        JSON.stringify(doctor).toLowerCase().includes(text.toLowerCase()),
       );
       setSearchResults(results);
     } else {
@@ -42,20 +44,24 @@ export default function SearchModal() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.searchContainer}>
-        <CustomIcon name="search" size={20} color="#9b9a9e" />
+        <CustomIcon name="search" size={20} color={colors.mutedForeground} />
         <TextInput
           style={styles.searchInput}
           placeholder={t("form.search-doctors")}
-          placeholderTextColor={Colors.lightText}
+          placeholderTextColor={colors.mutedForeground}
           value={searchQuery}
           onChangeText={handleSearch}
           autoFocus
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => handleSearch("")}>
-            <Ionicons name="close-circle" size={20} color="#9b9a9e" />
+            <Ionicons
+              name="close-circle"
+              size={20}
+              color={colors.mutedForeground}
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -68,14 +74,18 @@ export default function SearchModal() {
             style={styles.resultItem}
             onPress={() => handleResultPress(item)}
           >
-            <TextRegular style={styles.resultTitle}>
+            <TextRegular
+              style={[styles.resultTitle, { color: colors.foreground }]}
+            >
               {item.firstName} {item.lastName}
             </TextRegular>
           </TouchableOpacity>
         )}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            <TextRegular style={styles.emptyText}>
+            <TextRegular
+              style={[styles.emptyText, { color: colors.mutedForeground }]}
+            >
               {searchQuery.length > 0
                 ? t("form.no-doctors-found")
                 : t("form.start-typing-to-search-doctors")}
@@ -90,7 +100,6 @@ export default function SearchModal() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
   },
   searchContainer: {
     flexDirection: "row",
@@ -113,14 +122,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   resultTitle: {
-    color: "#000",
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 4,
-  },
-  resultDate: {
-    color: "#9b9a9e",
-    fontSize: 14,
   },
   emptyContainer: {
     flex: 1,
@@ -128,7 +132,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   emptyText: {
-    color: "#9b9a9e",
     fontSize: 16,
   },
 });

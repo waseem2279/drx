@@ -102,7 +102,9 @@ const SignUp = () => {
         sensitive
       />
 
-      <TextRegular style={styles.disclaimerText}>
+      <TextRegular
+        style={[styles.disclaimerText, { color: colors.mutedForeground }]}
+      >
         {t("login.disclaimer-start")}{" "}
         <Link href="/terms-of-service">
           <TextSemiBold style={styles.linkText}>
@@ -141,25 +143,12 @@ const styles = StyleSheet.create({
     gap: 16,
     position: "relative",
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#000",
-    textAlign: "center",
-    marginBottom: 24,
-  },
   orContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  orText: {
-    marginHorizontal: 12,
-    fontSize: 16,
-    color: "#444",
-  },
   disclaimerText: {
     fontSize: 14,
-    color: "#666",
     textAlign: "center",
     marginHorizontal: 16,
     marginTop: 24,
