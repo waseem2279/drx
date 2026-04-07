@@ -12,7 +12,7 @@ export const themes = {
     popoverForeground: "#000000",
 
     // Brand / Primary
-    primary: "#526bae",
+    primary: "#5678bb",
     primaryForeground: "#FFFFFF",
 
     // Secondary UI

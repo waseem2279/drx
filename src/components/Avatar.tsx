@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { TextSemiBold } from "./StyledText";
 import { Image } from "expo-image";
+import { useTheme } from "@/hooks/useTheme";
 
 const Avatar = ({
   presence = null,
@@ -18,7 +19,7 @@ const Avatar = ({
   size,
   source = null,
   initials = "",
-  color = "#ddd",
+  color,
   loading = false,
 }: {
   presence?: "online" | "offline" | null; // Make it more robust in the future so null is not an option
@@ -27,9 +28,10 @@ const Avatar = ({
   size: number;
   source?: string | number | null;
   initials?: string;
-  color?: string;
+  color?: string | undefined;
   loading?: boolean;
 }) => {
+  const { colors } = useTheme();
   const opacity = useSharedValue(1);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const Avatar = ({
         justifyContent: "center",
         width: size,
         height: size,
-        backgroundColor: color,
+        backgroundColor: color || colors.primary,
         borderRadius: 9999,
       }}
       onPress={onPress}
@@ -95,7 +97,7 @@ const Avatar = ({
               height: "100%",
               borderRadius: 9999,
               borderWidth: 1,
-              borderColor: "rgba(255, 255, 255, 0.2)",
+              borderColor: colors.border,
             }}
           />
         </>
@@ -103,7 +105,7 @@ const Avatar = ({
         <TextSemiBold
           style={{
             fontSize: size * 0.4,
-            color: "#555",
+            color: colors.background,
             textAlign: "center",
           }}
         >
