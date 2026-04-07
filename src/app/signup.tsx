@@ -13,9 +13,11 @@ import { useTranslation } from "react-i18next";
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import SubmitButton from "@/components/SubmitButton";
+import { useTheme } from "@/hooks/useTheme";
 
 const SignUp = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { signUp } = useSession();
   const { control, handleSubmit, formState } = useForm<any>({
     defaultValues: { role: t("common.patient").toLowerCase() },
@@ -36,7 +38,7 @@ const SignUp = () => {
   return (
     <KeyboardAwareScrollView
       bottomOffset={62}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.keyboardAwareScrollView}
     >
       {/* Role Selector */}
@@ -132,10 +134,8 @@ export default SignUp;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   keyboardAwareScrollView: {
-    backgroundColor: "#fff",
     padding: 16,
     flexDirection: "column",
     gap: 16,

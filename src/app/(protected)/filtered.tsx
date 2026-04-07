@@ -9,6 +9,7 @@ import { useFetchDoctorsByField } from "@/stores/useDoctorSearch";
 import { renderDoctorRow } from "@/components/DoctorList/DoctorListItem";
 import { useTranslation } from "react-i18next";
 import { getFilterMap } from "@/constants/options";
+import { useTheme } from "@/hooks/useTheme";
 
 type Content = {
   title: string;
@@ -20,6 +21,7 @@ type Content = {
 
 const FilteredListPage = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const filterMap = useMemo(() => getFilterMap(t), [t]);
   const { filter } = useLocalSearchParams();
   const [doctors, setDoctors] = useState<any[]>([]);
@@ -43,12 +45,12 @@ const FilteredListPage = () => {
     };
 
     fetchDoctors();
-  }, [filter]);
+  }, [content, fetchDoctorsByField, filter]);
 
   if (loading) return <LoadingScreen />;
 
   return (
-    <View style={{ backgroundColor: "#FFF", flex: 1 }}>
+    <View style={{ backgroundColor: colors.background, flex: 1 }}>
       <FlatList
         data={doctors}
         keyExtractor={(item) => item.id}

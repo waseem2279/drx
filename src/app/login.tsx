@@ -14,9 +14,11 @@ import { useTranslation } from "react-i18next";
 import CustomIcon from "@/components/CustomIcon";
 import OrDivider from "@/components/OrDivider";
 import { useClearDisclaimer, useDisclaimer } from "@/stores/useDisclaimerStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const SignIn = () => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { signIn } = useSession();
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
@@ -48,7 +50,10 @@ const SignIn = () => {
   return (
     <KeyboardAwareScrollView
       bottomOffset={62}
-      style={[styles.container, { paddingTop: insets.top }]}
+      style={[
+        styles.container,
+        { backgroundColor: colors.background, paddingTop: insets.top },
+      ]}
       contentContainerStyle={styles.keyboardAwareScrollView}
     >
       <TextSemiBold style={styles.headerText}>{t("login.header")}</TextSemiBold>
@@ -133,7 +138,6 @@ export default SignIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   keyboardAwareScrollView: {
     padding: 16,
@@ -180,7 +184,7 @@ const styles = StyleSheet.create({
 
 function getErrorMessage(
   error: FirebaseError,
-  t: (key: string) => string
+  t: (key: string) => string,
 ): string {
   if (error instanceof Error && error.cause === "email-not-verified") {
     return t("login.error.please-verify-your-email-before-signing-in");

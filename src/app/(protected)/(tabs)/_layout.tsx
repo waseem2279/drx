@@ -1,25 +1,26 @@
 import UserRow from "@/components/UserRow";
-import Colors from "@/constants/Colors";
+import { useTheme } from "@/hooks/useTheme";
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   return (
     <Tabs
       screenOptions={({ route }) => ({
         tabBarStyle: {
           display: route.name === "chats" ? "none" : "flex",
-          backgroundColor: "#FFF",
-          borderColor: Colors.faintGrey,
+          backgroundColor: colors.background,
+          borderColor: colors.accent,
           borderTopWidth: 1,
           paddingHorizontal: 60,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: Colors.black,
-        tabBarInactiveTintColor: Colors.lightText,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.mutedForeground,
       })}
     >
       <Tabs.Screen

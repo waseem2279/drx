@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from "react-native";
+import { useTheme } from "@/hooks/useTheme";
 
 type PageScrollViewProps = ScrollViewProps & {
   children?: ReactNode;
@@ -19,10 +20,12 @@ const PageScrollView = ({
   contentContainerStyle,
   ...props
 }: PageScrollViewProps) => {
+  const { colors } = useTheme();
+
   return (
     <ScrollView
       {...props}
-      style={[styles.container, style]}
+      style={[styles.container, { backgroundColor: colors.background }, style]}
       contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
     >
       {children}
@@ -35,7 +38,6 @@ export default PageScrollView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   contentContainer: {
     position: "relative",
