@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import examples from "libphonenumber-js/mobile/examples";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Control,
   Controller,
@@ -35,6 +35,24 @@ interface ControllerPhoneInputProps<TFieldValues extends FieldValues> {
   autoFocus?: boolean;
 }
 
+const defaultPhoneMask: (string | RegExp)[] = [
+  "+",
+  "1",
+  " ",
+  /\d/,
+  /\d/,
+  /\d/,
+  " ",
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+];
+
 const ControllerPhoneInput = <TFieldValues extends FieldValues>({
   control,
   rules = {},
@@ -43,41 +61,26 @@ const ControllerPhoneInput = <TFieldValues extends FieldValues>({
   autoFocus = false,
 }: ControllerPhoneInputProps<TFieldValues>) => {
   const { t, i18n } = useTranslation();
-  const [mask, setMask] = useState<(string | RegExp)[]>([
-    "+",
-    "1",
-    " ",
-    /\d/,
-    /\d/,
-    /\d/,
-    " ",
-    /\d/,
-    /\d/,
-    /\d/,
-    "-",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-  ]);
   const [maskedValue, setMaskedValue] = useState("");
-  const [placeholder, setPlaceholder] = useState<string | undefined>("");
   const country = useCountry();
 
-  // Generate a dynamic mask from libphonenumber-js
-  useEffect(() => {
+  const { mask, placeholder } = useMemo(() => {
     try {
       const example = getExampleNumber(
         country.code,
         examples,
       )?.formatNational();
-      setPlaceholder(example);
-      if (example) {
-        const dynamicMask = generateMaskFromExample(example);
-        setMask(dynamicMask);
-      }
+
+      return {
+        mask: example ? generateMaskFromExample(example) : defaultPhoneMask,
+        placeholder: example,
+      };
     } catch (e) {
       console.warn("Could not generate phone mask:", e);
+      return {
+        mask: defaultPhoneMask,
+        placeholder: undefined,
+      };
     }
   }, [country.code]);
 

@@ -7,13 +7,13 @@ import {
   getDayWidth,
   getLocaleData,
 } from "@/utils/calendarUtils";
+import DateTimePickerModal from "@/components/form/DateTimePickerModal";
 import { format } from "date-fns";
 import { router } from "expo-router";
 import { I18nManager, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars";
 import { DayProps } from "react-native-calendars/src/calendar/day";
 import { Direction } from "react-native-calendars/src/types";
-import DatePicker from "react-native-date-picker";
 import Avatar from "../Avatar";
 import IconButton from "../IconButton";
 import { TextSemiBold } from "../StyledText";
@@ -168,20 +168,21 @@ const DoctorCalendar = () => {
         style={styles.calendar}
       />
 
-      <DatePicker
-        locale={i18n.language}
-        modal
-        mode="date"
-        open={showDatePicker}
-        date={new Date(selectedDate)}
-        onConfirm={(date) => {
-          setShowDatePicker(false);
-          setSelectedDate(format(date, "yyyy-MM-dd"));
-        }}
-        onCancel={() => {
-          setShowDatePicker(false);
-        }}
-      />
+      {showDatePicker && (
+        <DateTimePickerModal
+          locale={i18n.language}
+          mode="date"
+          visible={showDatePicker}
+          value={new Date(selectedDate)}
+          onConfirm={(date) => {
+            setShowDatePicker(false);
+            setSelectedDate(format(date, "yyyy-MM-dd"));
+          }}
+          onDismiss={() => {
+            setShowDatePicker(false);
+          }}
+        />
+      )}
     </View>
   );
 };

@@ -13,7 +13,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 type ConditionForm = Pick<Condition, "name" | "comments">;

@@ -1,11 +1,4 @@
-import {
-  RTCPeerConnection as OriginalRTCPeerConnection,
-  RTCIceCandidate,
-} from "react-native-webrtc";
-
-type RTCIceCandidateEvent = {
-  candidate: RTCIceCandidate | null;
-};
+import { RTCPeerConnection as OriginalRTCPeerConnection } from "react-native-webrtc";
 
 type EventListenerOrEventListenerObject =
   | ((evt: any) => void)
@@ -48,17 +41,6 @@ class EventTargetPolyfill {
 
 class ExtendedRTCPeerConnection extends OriginalRTCPeerConnection {
   private _eventTarget: EventTargetPolyfill;
-
-  onicecandidate: ((event: RTCIceCandidateEvent) => void) | null = null;
-  onicecandidateerror: ((event: any) => void) | null = null;
-  oniceconnectionstatechange: ((event: any) => void) | null = null;
-  onicegatheringstatechange: ((event: any) => void) | null = null;
-  onnegotiationneeded: ((event: any) => void) | null = null;
-  onsignalingstatechange: ((event: any) => void) | null = null;
-  onconnectionstatechange: ((event: any) => void) | null = null;
-  ondatachannel: ((event: any) => void) | null = null;
-  ontrack: ((event: any) => void) | null = null;
-  onerror: ((event: any) => void) | null = null;
 
   constructor(configuration?: any) {
     super(configuration);

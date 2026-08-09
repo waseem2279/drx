@@ -46,7 +46,7 @@ export default DoctorList;
 
 const styles = StyleSheet.create({
   emptyStateContainer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: "center",
     alignItems: "center",
   },

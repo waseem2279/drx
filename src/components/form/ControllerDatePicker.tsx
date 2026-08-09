@@ -4,11 +4,11 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { Pressable, StyleSheet, View } from "react-native";
-import DatePicker from "react-native-date-picker";
 import { TextRegular } from "../StyledText";
 import i18next from "i18next";
 import { enUS } from "date-fns/locale";
 import { locales } from "@/constants/locales";
+import DateTimePickerModal from "./DateTimePickerModal";
 
 const ControllerDatePicker = ({
   control,
@@ -70,20 +70,21 @@ const ControllerDatePicker = ({
               <Ionicons name="calendar-outline" size={20} color={Colors.grey} />
             </Pressable>
 
-            <DatePicker
-              modal
-              mode="date"
-              open={showDatePicker}
-              date={value || new Date()}
-              maximumDate={maximumDate}
-              minimumDate={minimumDate}
-              onConfirm={(date) => {
-                setShowDatePicker(false);
-                onChange(date);
-              }}
-              onCancel={() => setShowDatePicker(false)}
-              locale={i18next.language}
-            />
+            {showDatePicker && (
+              <DateTimePickerModal
+                mode="date"
+                visible={showDatePicker}
+                value={value || new Date()}
+                maximumDate={maximumDate}
+                minimumDate={minimumDate}
+                onConfirm={(date) => {
+                  setShowDatePicker(false);
+                  onChange(date);
+                }}
+                onDismiss={() => setShowDatePicker(false)}
+                locale={i18next.language}
+              />
+            )}
           </View>
         );
       }}

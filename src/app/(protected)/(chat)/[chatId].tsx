@@ -16,14 +16,14 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { I18nManager, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
   Bubble,
+  Chat,
   Composer,
-  GiftedChat,
   InputToolbar,
-} from "react-native-gifted-chat";
+} from "@kesha-antonov/react-native-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { db, functions } from "../../../../firebaseConfig";
 import { useTranslation } from "react-i18next";
@@ -35,14 +35,14 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { useTheme } from "@/hooks/useTheme";
 
 interface Message {
-  _id: number;
+  _id: number | string;
   text: string;
-  createdAt: Date;
+  createdAt: number;
   user: User;
 }
 
 interface User {
-  _id: number;
+  _id: number | string;
   name: string;
   avatar: string;
 }
@@ -51,6 +51,7 @@ const ChatRoom = () => {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const { chatId } = useLocalSearchParams();
+  const chatIdParam = String(chatId);
   const [messages, setMessages] = useState<Message[]>([]);
   const [status, setStatus] = useState<{
     message: string;
@@ -58,11 +59,57 @@ const ChatRoom = () => {
   } | null>(null);
   const userData = useUserData();
   const [loading, setLoading] = useState(true);
-  const chat = useChatsById(chatId as string);
+  const chat = useChatsById(chatIdParam);
   const insets = useSafeAreaInsets();
+  const chatTheme = useMemo(
+    () => ({
+      colors: {
+        accent: colors.primary,
+        background: colors.background,
+        surface: colors.background,
+        incomingBubble: Colors.peach,
+        outgoingBubble: Colors.lightLavender,
+        incomingText: Colors.black,
+        outgoingText: Colors.black,
+        incomingMeta: Colors.black,
+        outgoingMeta: Colors.black,
+        inputBarBackground: colors.background,
+        inputBackground: Colors.lightGrey,
+        inputText: Colors.black,
+        inputFieldBorder: Colors.faintGrey,
+        placeholder: Colors.lightText,
+      },
+      radii: {
+        bubble: 12,
+        bubbleGrouped: 12,
+      },
+      spacing: {
+        bubblePaddingH: 8,
+        bubblePaddingV: 3,
+        screenEdge: 8,
+        betweenGroups: 8,
+        withinGroup: 2,
+      },
+      typography: {
+        message: {
+          fontSize: 14,
+          lineHeight: 20,
+          fontWeight: "400" as const,
+        },
+        time: {
+          fontSize: 10,
+          fontWeight: "400" as const,
+        },
+      },
+    }),
+    [colors.background, colors.primary],
+  );
 
   // Firestore references
-  const messagesRef = collection(db, "chats", chatId as string, "messages");
+  const messagesRef = useMemo(
+    () => collection(db, "chats", chatIdParam, "messages"),
+    [chatIdParam],
+  );
 
   const otherUser =
     userData?.role === "doctor"
@@ -82,19 +129,21 @@ const ChatRoom = () => {
 
   // Mainly used to fetch the chat data and messages
   useEffect(() => {
-    if (!chat) {
-      setLoading(false);
-      return;
-    }
+    if (!chat) return;
 
     // Fetch chat messages
     const unsubscribeMessages = onSnapshot(messagesRef, (snapshot) => {
       const loadedMessages = snapshot.docs.map((doc) => {
         const data = doc.data();
+        const createdAt =
+          (data.createdAt as Timestamp | undefined)?.toMillis?.() ??
+          (data.createdAt as Timestamp | undefined)?.toDate?.().getTime() ??
+          Date.now();
+
         return {
           _id: data.id || doc.id,
           text: data.text,
-          createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
+          createdAt,
           user: {
             _id: data.senderId,
             name: getSenderName(data.senderId, chat),
@@ -105,14 +154,10 @@ const ChatRoom = () => {
 
       // Sort messages by createdAt in descending order
       setMessages(
-        loadedMessages.sort(
-          (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-        ),
+        loadedMessages.sort((a, b) => b.createdAt - a.createdAt),
       );
+      setLoading(false);
     });
-
-    // Below causes infinite loop when uncommented
-    setLoading(false);
 
     return () => unsubscribeMessages();
   }, [chat, messagesRef]);
@@ -130,7 +175,7 @@ const ChatRoom = () => {
         functions,
         "sendMessage",
       )({
-        chatId: chatId,
+        chatId: chatIdParam,
         text: message.text.trim(),
       });
     } catch (err) {
@@ -156,9 +201,16 @@ const ChatRoom = () => {
           header: () => <ChatHeader chatId={chatId as string} />,
         }}
       />
-      <GiftedChat
+      <Chat
+        colorScheme="light"
         locale={i18n.language}
-        placeholder={t("chat.type-a-message")}
+        theme={chatTheme}
+        messagesContainerStyle={{
+          backgroundColor: colors.background,
+        }}
+        textInputProps={{
+          placeholder: t("chat.type-a-message"),
+        }}
         renderInputToolbar={(props) => {
           return (
             <View
@@ -198,12 +250,18 @@ const ChatRoom = () => {
           return (
             <Composer
               {...props}
-              textInputStyle={{
-                textAlign: I18nManager.isRTL ? "right" : "left",
-                writingDirection: I18nManager.isRTL ? "rtl" : "ltr",
-                flex: 1,
+              textInputProps={{
+                ...props.textInputProps,
+                style: [
+                  props.textInputProps?.style,
+                  {
+                    textAlign: I18nManager.isRTL ? "right" : "left",
+                    writingDirection: I18nManager.isRTL ? "rtl" : "ltr",
+                    flex: 1,
+                  },
+                ],
               }}
-              multiline
+              isMultiline
             />
           );
         }}
@@ -285,11 +343,8 @@ const ChatRoom = () => {
             <View
               style={{
                 borderRadius: 12,
-                paddingVertical: 2,
                 alignSelf:
                   props.position === "left" ? "flex-start" : "flex-end",
-                marginHorizontal: 8,
-                marginBottom: 4,
               }}
             >
               <TextRegular
@@ -311,7 +366,7 @@ const ChatRoom = () => {
             <View
               style={{
                 paddingHorizontal: 8,
-                paddingVertical: 4,
+                paddingTop: 6,
               }}
             >
               <TextRegular
@@ -334,11 +389,13 @@ const ChatRoom = () => {
               wrapperStyle={{
                 left: {
                   backgroundColor: Colors.peach,
-                  padding: 8,
+                  borderRadius: 12,
+                  maxWidth: "76%",
                 },
                 right: {
                   backgroundColor: Colors.lightLavender,
-                  padding: 8,
+                  borderRadius: 12,
+                  maxWidth: "76%",
                 },
               }}
             />

@@ -11,8 +11,8 @@ import { View } from "react-native";
 const Page = () => {
   const fetchSomeDoctors = useFetchSomeDoctors();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [refresh, setRefresh] = useState(0);
-  const [mapVisible, setMapVisible] = useState(false);
+  const [refresh, setRefresh] = useState(1);
+  const [mapVisible, setMapVisible] = useState(true);
 
   const handleSheetChanges = (index: number) => {
     if (index === 0) setMapVisible(true);
@@ -31,11 +31,9 @@ const Page = () => {
   };
 
   useEffect(() => {
-    // Populates the initial doctor list so that filteredDoctors can be used
-    showMap();
     // TODO: Implement actual searching
     fetchSomeDoctors();
-  }, []);
+  }, [fetchSomeDoctors]);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>

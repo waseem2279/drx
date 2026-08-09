@@ -11,10 +11,10 @@ import {
   RegisterOptions,
 } from "react-hook-form";
 import { Pressable, StyleSheet, View } from "react-native";
-import DatePicker from "react-native-date-picker";
 import { TextRegular } from "../StyledText";
 import i18next from "i18next";
 import { locales } from "@/constants/locales";
+import DateTimePickerModal from "./DateTimePickerModal";
 
 interface ControllerTimePickerProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
@@ -81,21 +81,22 @@ const ControllerTimePicker = <TFieldValues extends FieldValues>({
               <Ionicons name="time-outline" size={20} color={Colors.grey} />
             </Pressable>
 
-            <DatePicker
-              locale={i18next.language}
-              modal
-              mode="time"
-              open={showTimePicker}
-              date={dateValue}
-              onConfirm={(date) => {
-                setShowTimePicker(false);
-                onChange({
-                  hour: date.getHours(),
-                  minute: date.getMinutes(),
-                });
-              }}
-              onCancel={() => setShowTimePicker(false)}
-            />
+            {showTimePicker && (
+              <DateTimePickerModal
+                locale={i18next.language}
+                mode="time"
+                visible={showTimePicker}
+                value={dateValue}
+                onConfirm={(date) => {
+                  setShowTimePicker(false);
+                  onChange({
+                    hour: date.getHours(),
+                    minute: date.getMinutes(),
+                  });
+                }}
+                onDismiss={() => setShowTimePicker(false)}
+              />
+            )}
           </View>
         );
       }}

@@ -1,6 +1,6 @@
 import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotificationsAsync";
-import { EventSubscription } from "expo-modules-core";
 import * as Notifications from "expo-notifications";
+import type { EventSubscription } from "expo-notifications";
 import { create } from "zustand";
 
 export interface NotificationStoreState {

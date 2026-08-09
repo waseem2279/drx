@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { Route, router } from "expo-router";
+import { Href, router } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomIcon from "../CustomIcon";
 import { TextRegular, TextSemiBold } from "../StyledText";
@@ -13,7 +13,7 @@ const NotificationCard = ({
   title: string;
   message: string;
   color?: string;
-  url?: Route; // update to deep linking later
+  url?: Href; // update to deep linking later
 }) => {
   return (
     <TouchableOpacity

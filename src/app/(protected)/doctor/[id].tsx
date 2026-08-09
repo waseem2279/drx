@@ -9,7 +9,7 @@ import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -45,19 +45,14 @@ const Page = () => {
       }
     };
 
-    if (id) {
-      fetchDoctorProfile();
-    } else {
-      setError("Doctor profile not found");
-      setIsLoading(false);
-    }
+    if (id) fetchDoctorProfile();
   }, [id]);
 
   const handleBooking = () => {
     router.navigate(`/doctor/booking?id=${id}`);
   };
 
-  const languageLabel = useMemo(() => {
+  const languageLabel = (() => {
     if (!doctor?.languages?.length) return "-";
 
     return doctor.languages
@@ -67,7 +62,17 @@ const Page = () => {
           code,
       )
       .join(t("common.list-separator"));
-  }, [doctor?.languages, t]);
+  })();
+
+  if (!id) {
+    return (
+      <View style={styles.centered}>
+        <TextRegular style={styles.errorText}>
+          Doctor profile not found
+        </TextRegular>
+      </View>
+    );
+  }
 
   if (isLoading) return <LoadingScreen />;
 
